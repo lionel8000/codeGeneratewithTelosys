@@ -1,0 +1,257 @@
+/**
+   BNAME                    : bean name with first letter Upcase
+   BNAME_V                  : bean name with first letter LowerCase
+   BNAME_DAO and BNAME_DAO_V   has relative same meaning for the BNAME
+   KEYS                     : all keys concated with first letter Upcase
+   KEYS_PAR                 : all keys with declare type
+   KEYS_PAR_NODECLARE       : all keys with no declare type use as parameter
+*/
+#set ( $AUTO_INCR_KEY = false )
+#foreach( $attr in $beanClass.keyAttributes )
+#if ( $attr.isAutoIncremented() )
+#set ( $AUTO_INCR_KEY = true )
+#end
+#end
+## BEAN的名字 City
+#set ( $BNAME = "${beanClass.name}" )
+## BEAN类的对象名 city
+#set ( $BNAME_V = $beanClass.name.substring(0,1).toLowerCase() + $beanClass.name.substring(1) )
+#set ( $BNAME_DAO = ${beanClass.name} + "Dao" )
+#set ( $BNAME_DAO_V = $BNAME_DAO.substring(0,1).toLowerCase() + $BNAME_DAO.substring(1) )
+
+## 主键组合，例如key1 key2 则为Key1Key2
+#set ( $KEYS = "" )
+## 主键变量 例如key1 key2 则为int key1,int key2
+#set ( $KEYS_PAR = "" )
+##主键返回类型，其实没用处 例如key1 key2 则为int,int
+#set ( $KEYS_TYPE = "" )
+##主键属性的获取。例如city.getId(),如果是多个主键则为 city,getId(),city.getId2()
+#set ( $KEYS_PAR_BEAN = "" )
+##主键属性变量的获取。例如id1,id2
+#set ( $KEYS_PAR_NODECLARE = "" )
+##主键属性变量的获取。例如city.getId1(),city.getId2()
+#set ( $BEAN_V_KEY_GETTER = "" )
+#foreach($field in $beanClass.keyAttributes)
+#set ( $KEYS = $KEYS+$field.name.substring(0,1).toUpperCase()+$field.name.substring(1))
+#set ( $KEYS_PAR = $KEYS_PAR+ "," + $field.type +" " + $field.name )
+#set ( $KEYS_TYPE = $KEYS_TYPE+ "," + $field.type)
+#set ( $KEYS_PAR_BEAN = $KEYS_PAR_BEAN+ "," + $BNAME_V +"." + $field.getter+"()" )
+#set ( $KEYS_PAR_NODECLARE = $KEYS_PAR_NODECLARE+ ","+$field.name )
+#set ($BEAN_V_KEY_GETTER = $BEAN_V_KEY_GETTER +","+ ${BNAME_V}+"."+${field.getter}+"()")
+#end
+#set ( $KEYS_PAR = $KEYS_PAR.substring(1) )
+#set ( $KEYS_TYPE = $KEYS_TYPE.substring(1) )
+#set ( $KEYS_PAR_BEAN = $KEYS_PAR_BEAN.substring(1) )
+#set ( $KEYS_PAR_NODECLARE = $KEYS_PAR_NODECLARE.substring(1) )
+#set ( $BEAN_V_KEY_GETTER = $BEAN_V_KEY_GETTER.substring(1) )
+##主键变量集合，例如id1,id2,id3
+#set ( $SQL_KEY_NAMES = "" )
+##主键变量集合占位符，例如id1,id2,id3 则得到?,?,?
+#set ( $SQL_KEY_NAMES_Q = "" )
+##主键变量集合，例如city.getId1(),city.getId2()
+#set ( $SQL_KEY_BEAN_GETTER = "" )
+##主键变量集合用于查询修改，例如id1=?,id2=?,id3=?
+#set ( $SQL_UPDATE_KEY_Q = "" )
+#foreach($field in $beanClass.keyAttributes)
+#set ( $SQL_KEY_NAMES = $SQL_KEY_NAMES+ ","+$field.databaseName)
+#set ( $SQL_KEY_NAMES_Q = $SQL_KEY_NAMES_Q+ ",?")
+#set ( $SQL_KEY_BEAN_GETTER = $SQL_KEY_BEAN_GETTER+ ","+$BNAME_V + "." + $field.getter+"()")
+#set ( $SQL_UPDATE_KEY_Q = $SQL_UPDATE_KEY_Q + " and $field.databaseName=?")
+#end
+#set ( $SQL_KEY_NAMES = $SQL_KEY_NAMES.substring(1) )
+#set ( $SQL_KEY_NAMES_Q = $SQL_KEY_NAMES_Q.substring(1) )
+#set ( $SQL_KEY_BEAN_GETTER = $SQL_KEY_BEAN_GETTER.substring(1) )
+#set ( $SQL_UPDATE_KEY_Q = $SQL_UPDATE_KEY_Q.substring(4) )
+##变量集合，例如id1,id2,id3
+#set ( $SQL_NOKEY_NAMES = "" )
+##主键变量集合占位符，例如id1,id2,id3 则得到?,?,?
+#set ( $SQL_NOKEY_NAMES_Q = "" )
+##主键变量集合，例如city.getId1(),city.getId2()
+#set ( $SQL_NOKEY_BEAN_GETTER = "" )
+##主键变量集合用于更新，例如column1=?,column2=?,column3=?
+#set ( $SQL_UPDATE_NOKEY_Q = "" )
+#foreach($field in $beanClass.nonKeyAttributes)
+#set ( $SQL_NOKEY_NAMES = $SQL_NOKEY_NAMES+ ","+$field.databaseName)
+#set ( $SQL_NOKEY_NAMES_Q = $SQL_NOKEY_NAMES_Q+ ",?")
+#set ( $SQL_NOKEY_BEAN_GETTER = $SQL_NOKEY_BEAN_GETTER+ ","+$BNAME_V + "." + $field.getter+"()")
+#set ( $SQL_UPDATE_NOKEY_Q = $SQL_UPDATE_NOKEY_Q + ",$field.databaseName=?")
+#end
+#set ( $SQL_NOKEY_NAMES = $SQL_NOKEY_NAMES.substring(1) )
+#set ( $SQL_NOKEY_NAMES_Q = $SQL_NOKEY_NAMES_Q.substring(1) )
+#set ( $SQL_NOKEY_BEAN_GETTER = $SQL_NOKEY_BEAN_GETTER.substring(1) )
+#set ( $SQL_UPDATE_NOKEY_Q = $SQL_UPDATE_NOKEY_Q.substring(1) )
+#if  ($AUTO_INCR_KEY)
+##插入语句  (id,name_id,cr_date) values(?,?,?)
+  #set ( $INSERT_SQL = "(" + $SQL_NOKEY_NAMES +")  values(" + $SQL_NOKEY_NAMES_Q +")")
+##插入语句参数  city.getId(),city.getNameid(),city.getCr_date()
+  #set ( $INSERT_SQL_PARM = $SQL_NOKEY_BEAN_GETTER)
+#else
+  #set ( $INSERT_SQL = "("+$SQL_KEY_NAMES+","+$SQL_NOKEY_NAMES+")  values(" +$SQL_KEY_NAMES_Q+"," + $SQL_NOKEY_NAMES_Q +")")
+  #set ( $INSERT_SQL_PARM = $SQL_KEY_BEAN_GETTER + ","+$SQL_NOKEY_BEAN_GETTER)
+#end
+##更新时候传入的参数，主键值在最后
+#set ( $UPDATE_SQL_PARM = $SQL_NOKEY_BEAN_GETTER + ","+$SQL_KEY_BEAN_GETTER) 
+## 更新时候，SQL语句中的 where id=? 
+#set ( $SQL_UPDATE_KEY_Q_WITHWHERE = " where " + $SQL_UPDATE_KEY_Q)
+##更新时候set后面的语句
+#set ( $SQL_UPDATE_SET_TO_END = " set " +  "$SQL_UPDATE_NOKEY_Q" +  "$SQL_UPDATE_KEY_Q_WITHWHERE")
+##
+#set ( $SQL_DELETE_WHERE_TO_END = " where " + $SQL_UPDATE_KEY_Q)
+#set ( $SQL_GET_BY_KEY = "select " + $SQL_KEY_NAMES + " ," + $SQL_NOKEY_NAMES + " from ")
+
+
+package ${target.javaPackageFromFolder($SRC)};
+
+import $beanClass.fullName;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
+import com.bstek.bdf.pagination.CoreJdbcDaoSupport;
+import com.bstek.bdf.pagination.Pagination;
+
+/**
+ * @author lionel.xu@bstek.com
+ * @since 1.0
+ */
+public class ${BNAME}Dao extends CoreJdbcDaoSupport {
+    private static String TABLE = "${beanClass.sqlTable}";
+	public $KEYS_TYPE insert${BNAME}(${BNAME} $BNAME_V) throws Exception {
+		String sql = "insert into "+TABLE +"$INSERT_SQL";
+		Object args[] = new Object[] { $INSERT_SQL_PARM };
+		this.getJdbcTemplate().update(sql, args);
+        return $BEAN_V_KEY_GETTER;
+	}
+	
+	
+	public void delete${BNAME}By$KEYS($KEYS_PAR) throws Exception {
+		String sql = "delete from " +TABLE +"$SQL_DELETE_WHERE_TO_END";
+		this.getJdbcTemplate().update(sql, new Object[] { $KEYS_PAR_NODECLARE });
+	}
+	
+
+
+
+	public void update${BNAME}(${BNAME} $BNAME_V) throws Exception {
+		String sql = "update " +TABLE +"$SQL_UPDATE_SET_TO_END";
+		Object args[] = new Object[] {$UPDATE_SQL_PARM};
+		this.getJdbcTemplate().update(sql, args);
+	}
+	
+	
+	
+	
+	public ${BNAME} get${BNAME}By$KEYS($KEYS_PAR) {
+		String sql = "$SQL_GET_BY_KEY"+TABLE+"$SQL_UPDATE_KEY_Q_WITHWHERE";
+		List<EnumObject> deptList = this.getJdbcTemplate().query(sql,
+				new Object[] {}, new ${BNAME}RowMapper());
+		return deptList.size() > 0 ? deptList.get(0) : null;
+
+	}
+	
+	public List<${BNAME}> getAll${BNAME}(){
+		String sql = "$SQL_GET_BY_KEY" + TABLE;		
+		return this.getJdbcTemplate().query(sql, new ${BNAME}RowMapper());
+		
+	}
+
+	public Collection<${BNAME}> getAll${BNAME}(Map<String, Object> parameter, ${BNAME} ${BNAME_V}) {
+		String sql = "$SQL_GET_BY_KEY"+TABLE+" where 1=1 ";
+		StringBuffer sb = new StringBuffer(" ");
+		List<Object> params = new ArrayList<Object>();
+		boolean withParameter = false; 
+		if(parameter != null){
+	#foreach($field in $beanClass.keyAttributes)
+            
+			if(parameter.get("$field.name")!=null){
+			    withParameter = true;    
+            #set ( $CONDITION_ITEM = " and " + $field.databaseName + "=? " )
+					sb.append("$CONDITION_ITEM");
+						params.add(parameter.get("$field.name"));
+			}
+            #end
+	#foreach($field in $beanClass.nonKeyAttributes)
+
+			if(parameter.get("$field.name")!=null){
+			    withParameter = true;    
+            #set ( $CONDITION_ITEM = " and " + $field.databaseName + "=? " )
+					sb.append("$CONDITION_ITEM");
+						params.add(parameter.get("$field.name"));
+			}
+            #end
+		}
+		if(withParameter){
+			return this.getJdbcTemplate().query(sql+ sb.toString(),params.toArray(), new ${BNAME}RowMapper());
+		}else{
+			return this.getJdbcTemplate().query(sql, new ${BNAME}RowMapper());
+		}
+		
+	}
+	
+	
+	public Pagination<${BNAME}> getPageAll${BNAME}ByCondition(Map<String, Object> parameter,${BNAME} ${BNAME_V}, int pageIndex, int pageSize) {
+		String sql = "$SQL_GET_BY_KEY"+TABLE+" where 1=1 ";
+		String countSql = "select count(*) from "+TABLE+" where 1=1 ";
+		StringBuffer sb = new StringBuffer(" ");
+		List<Object> params = new ArrayList<Object>();
+		boolean withParameter = false; 
+		if(parameter != null){
+	#foreach($field in $beanClass.keyAttributes)
+
+			if(parameter.get("$field.name")!=null){
+				    withParameter = true;    
+
+            #set ( $CONDITION_ITEM = " and " + $field.databaseName + "=? " )
+					sb.append("$CONDITION_ITEM");
+						params.add(parameter.get("$field.name"));
+			}
+            #end
+	#foreach($field in $beanClass.nonKeyAttributes)
+
+			if(parameter.get("$field.name")!=null){
+			    withParameter = true;    
+            #set ( $CONDITION_ITEM = " and " + $field.databaseName + "=? " )
+					sb.append("$CONDITION_ITEM");
+						params.add(parameter.get("$field.name"));
+			}
+            #end
+		}
+		Pagination<${BNAME}> page = new Pagination<${BNAME}>(pageIndex,pageSize);
+		if(withParameter){
+			this.paginationQuery(sql + sb.toString(),countSql + sb.toString(), params.toArray(), page,new ${BNAME}RowMapper());
+		}else{
+		    this.paginationQuery(sql,countSql ,page,new ${BNAME}RowMapper());
+		}
+		return page;
+	}
+	
+	
+	public Pagination<${BNAME}> getPageAll${BNAME}(int pageIndex, int pageSize) {
+		String sql ="$SQL_GET_BY_KEY" + TABLE;
+		String countSql = "select count(*) from " + TABLE;
+		Pagination<${BNAME}> page = new Pagination<${BNAME}>(pageIndex,pageSize);
+		this.paginationQuery(sql,countSql,new Object[]{}, page,	new ${BNAME}RowMapper());
+		return page;
+	}
+
+	public class ${BNAME}RowMapper implements RowMapper<${BNAME}> {
+		public ${BNAME} mapRow(ResultSet rs, int rowNum) throws SQLException {
+			${BNAME} ${BNAME_V} = new ${BNAME}();
+
+	#foreach($field in $beanClass.keyAttributes)
+	#set ( $getWithType = "get" + $field.type.substring(0,1).toUpperCase()+$field.type.substring(1))
+	${BNAME_V}.${field.setter}(rs.${getWithType}("$field.databaseName"))
+	#end	
+	#foreach($field in $beanClass.nonKeyAttributes)
+	#set ( $getWithType = "get" + $field.type.substring(0,1).toUpperCase()+$field.type.substring(1))
+	${BNAME_V}.${field.setter}(rs.${getWithType}("$field.databaseName"))
+	#end
+			return ${BNAME_V};
+		}
+	}
+}

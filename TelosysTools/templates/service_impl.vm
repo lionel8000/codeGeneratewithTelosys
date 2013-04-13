@@ -1,0 +1,78 @@
+#set ( $BNAME = "${beanClass.name}" )
+#set ( $BNAME_V = $beanClass.name.substring(0,1).toLowerCase() + $beanClass.name.substring(1) )
+#set ( $BNAME_DAO = ${beanClass.name} + "Dao" )
+#set ( $BNAME_DAO_V = $BNAME_DAO.substring(0,1).toLowerCase() + $BNAME_DAO.substring(1) )
+#set ( $KEYS = "" )
+#foreach($singlekey in $beanClass.keyAttributes)
+#set ( $KEYS = $KEYS+$singlekey.name.substring(0,1).toUpperCase()+$singlekey.name.substring(1))
+#end
+#set ( $KEYS_PAR = "" )
+#foreach($field in $beanClass.keyAttributes)
+#set ( $KEYS_PAR = $KEYS_PAR+ "," + $field.type +" " + $field.name )
+#end
+#set ( $KEYS_PAR = $KEYS_PAR.substring(1) )
+#set ( $KEYS_PAR_NODECLARE = "" )
+#foreach($field in $beanClass.keyAttributes)
+#set ( $KEYS_PAR_NODECLARE = $KEYS_PAR_NODECLARE+ ","+$field.name )
+#end
+#set ( $KEYS_PAR_NODECLARE = $KEYS_PAR_NODECLARE.substring(1) )
+#set ( $KEYS_TYPE = "" )
+#foreach($field in $beanClass.keyAttributes)
+#set ( $KEYS_TYPE = $KEYS_TYPE+ "," + $field.type)
+#end
+#set ( $KEYS_TYPE = $KEYS_TYPE.substring(1) )
+#set ( $BASE_PACKAGE = $beanClass.package.substring(0,$beanClass.package.lastIndexOf(".")))
+
+package ${target.javaPackageFromFolder($SRC)} ;
+
+import ${BASE_PACKAGE}.dao.$BNAME_DAO;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import $beanClass.fullName;
+import com.bstek.bdf.pagination.Pagination;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Component;
+
+
+@Component
+public class ${BNAME}ServiceImpl implements ${BNAME}Service{
+        
+    @Resource
+	$BNAME_DAO $BNAME_DAO_V;
+
+	public $KEYS_TYPE insert${BNAME}(${BNAME} $BNAME_V) throws Exception{
+	    return ${BNAME_DAO_V}.insert${BNAME}($BNAME_V);
+	}
+
+	public void delete${BNAME}By$KEYS($KEYS_PAR) throws Exception{
+		${BNAME_DAO_V}.delete${BNAME}By$KEYS($KEYS_PAR_NODECLARE);
+	}
+
+	public void update${BNAME}(${BNAME} $BNAME_V) throws Exception{
+		${BNAME_DAO_V}.update${BNAME}($BNAME_V);
+	}
+
+	
+	
+	public ${BNAME} get${BNAME}By$KEYS($KEYS_PAR){
+		return ${BNAME_DAO_V}.get${BNAME}By$KEYS($KEYS_PAR_NODECLARE);
+	}
+
+	public List<${BNAME}> getAll${BNAME}(){
+		return ${BNAME_DAO_V}.getAll${BNAME}();
+	}
+
+	public Collection<${BNAME}> getAll${BNAME}(Map<String, Object> parameter){
+		return ${BNAME_DAO_V}.getAll${BNAME}(parameter);
+	}
+
+	public Pagination<${BNAME}> getPageAll${BNAME}ByCondition(Map<String, Object> map, int pageIndex,int pageSize){
+		return ${BNAME_DAO_V}.getPageAll${BNAME}ByCondition(map,pageIndex,pageSize);	
+	}
+
+	public Pagination<${BNAME}> getPageAll${BNAME}(int pageIndex,int pageSize){
+		return ${BNAME_DAO_V}.getPageAll${BNAME}(pageIndex,pageSize);
+	}
+
+}

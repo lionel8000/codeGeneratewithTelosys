@@ -1,0 +1,73 @@
+#set ( $BNAME = "${beanClass.name}" )
+#set ( $BNAME_V = $beanClass.name.substring(0,1).toLowerCase() + $beanClass.name.substring(1) )
+
+#set ( $KEYS = "" )
+#foreach($singlekey in $beanClass.keyAttributes)
+#set ( $KEYS = $KEYS+$singlekey.name.substring(0,1).toUpperCase()+$singlekey.name.substring(1))
+#end
+
+#set ( $KEYS_PAR = "" )
+#foreach($field in $beanClass.keyAttributes)
+#set ( $KEYS_PAR = $KEYS_PAR+ "," + $field.type +" " + $field.name )
+#end
+#set ( $KEYS_PAR = $KEYS_PAR.substring(1) )
+#set ( $KEYS_TYPE = "" )
+#foreach($field in $beanClass.keyAttributes)
+#set ( $KEYS_TYPE = $KEYS_TYPE+ "," + $field.type)
+#end
+#set ( $KEYS_TYPE = $KEYS_TYPE.substring(1) )
+
+package ${target.javaPackageFromFolder($SRC)} ;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import $beanClass.fullName;
+import com.bstek.bdf.pagination.Pagination;
+
+/**
+* 汉字测试
+*/
+public interface ${BNAME}Service {
+
+	public $KEYS_TYPE insert${BNAME}(${BNAME} $BNAME_V) throws Exception;
+
+	public void delete${BNAME}By$KEYS($KEYS_PAR) throws Exception;
+
+	public void update${BNAME}(${BNAME} $BNAME_V) throws Exception;
+
+	
+	
+	public ${BNAME} get${BNAME}By$KEYS($KEYS_PAR);
+
+	public List<${BNAME}> getAll${BNAME}();
+
+	public Collection<${BNAME}> getAll${BNAME}(
+			Map<String, Object> parameter, ${BNAME} $BNAME_V);
+
+	public Pagination<${BNAME}> getPageAll${BNAME}ByCondition(
+			Map<String, Object> map, ${BNAME} $BNAME_V, int pageIndex,
+			int pageSize);
+
+	public Pagination<${BNAME}> getPageAll${BNAME}(int pageIndex,
+			int pageSize);
+
+	
+	
+	
+	public ${BNAME} find${BNAME}By$KEYS($KEYS_PAR);
+
+	public List<${BNAME}> findAll${BNAME}();
+
+	public Collection<${BNAME}> findAll${BNAME}(
+			Map<String, Object> parameter, ${BNAME} $BNAME_V);;
+
+	public Pagination<${BNAME}> findPageAll${BNAME}ByCondition(
+			Map<String, Object> map, ${BNAME} $BNAME_V, int pageIndex,
+			int pageSize);
+
+	public Pagination<${BNAME}> findPageAll${BNAME}(int pageIndex,
+			int pageSize);
+
+}
