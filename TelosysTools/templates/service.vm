@@ -26,24 +26,32 @@ import java.util.Map;
 import $beanClass.fullName;
 import com.bstek.bdf.pagination.Pagination;
 
-/**
-* 汉字测试
-*/
 public interface ${BNAME}Service {
+
 
 	public $KEYS_TYPE insert${BNAME}(${BNAME} $BNAME_V) throws Exception;
 
+	public $KEYS_TYPE insert${BNAME}Selective(${BNAME} $BNAME_V) throws Exception;
+
 	public void delete${BNAME}By$KEYS($KEYS_PAR) throws Exception;
+	
+	public void delete${BNAME}ByBean(${BNAME} $BNAME_V) throws Exception;
 
 	public void update${BNAME}(${BNAME} $BNAME_V) throws Exception;
-		
+
+   	public void update${BNAME}Selective(${BNAME} $BNAME_V) throws Exception;
+  	
 	public ${BNAME} get${BNAME}By$KEYS($KEYS_PAR);
 
 	public List<${BNAME}> getAll${BNAME}();
 
 	public Collection<${BNAME}> getAll${BNAME}(	Map<String, Object> parameter);
 
+	public Collection<${BNAME}> getAll${BNAME}ByBean(${BNAME} $BNAME_V);
+
 	public Pagination<${BNAME}> getPageAll${BNAME}ByCondition(Map<String, Object> map,int pageIndex,int pageSize);
+
+	public Pagination<${BNAME}> getPageAll${BNAME}ByBean(${BNAME} $BNAME_V, int pageIndex, int pageSize);
 
 	public Pagination<${BNAME}> getPageAll${BNAME}(int pageIndex,int pageSize);
 

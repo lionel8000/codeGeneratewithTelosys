@@ -44,16 +44,25 @@ public class ${BNAME}ServiceImpl implements ${BNAME}Service{
 	public $KEYS_TYPE insert${BNAME}(${BNAME} $BNAME_V) throws Exception{
 	    return ${BNAME_DAO_V}.insert${BNAME}($BNAME_V);
 	}
-
+    
+	public $KEYS_TYPE insert${BNAME}Selective(${BNAME} $BNAME_V) throws Exception {
+	    return ${BNAME_DAO_V}.insert${BNAME}Selective($BNAME_V);
+	}
+	
 	public void delete${BNAME}By$KEYS($KEYS_PAR) throws Exception{
 		${BNAME_DAO_V}.delete${BNAME}By$KEYS($KEYS_PAR_NODECLARE);
 	}
 
+	public void delete${BNAME}ByBean(${BNAME} $BNAME_V) throws Exception{
+		${BNAME_DAO_V}.delete${BNAME}ByBean($BNAME_V);
+	}	
+	
 	public void update${BNAME}(${BNAME} $BNAME_V) throws Exception{
 		${BNAME_DAO_V}.update${BNAME}($BNAME_V);
 	}
 
-	
+  	public void update${BNAME}Selective(${BNAME} $BNAME_V) throws Exception {
+    }
 	
 	public ${BNAME} get${BNAME}By$KEYS($KEYS_PAR){
 		return ${BNAME_DAO_V}.get${BNAME}By$KEYS($KEYS_PAR_NODECLARE);
@@ -66,11 +75,21 @@ public class ${BNAME}ServiceImpl implements ${BNAME}Service{
 	public Collection<${BNAME}> getAll${BNAME}(Map<String, Object> parameter){
 		return ${BNAME_DAO_V}.getAll${BNAME}(parameter);
 	}
+    
+	public Collection<${BNAME}> getAll${BNAME}ByBean(${BNAME} $BNAME_V) {
+		return ${BNAME_DAO_V}.getAll${BNAME}ByBean($BNAME_V);
+	}
 
+	
 	public Pagination<${BNAME}> getPageAll${BNAME}ByCondition(Map<String, Object> map, int pageIndex,int pageSize){
 		return ${BNAME_DAO_V}.getPageAll${BNAME}ByCondition(map,pageIndex,pageSize);	
 	}
+    
+	public Pagination<${BNAME}> getPageAll${BNAME}ByBean(${BNAME} $BNAME_V, int pageIndex, int pageSize) {
+		return ${BNAME_DAO_V}.getPageAll${BNAME}ByBean($BNAME_V,pageIndex,pageSize);	
+	}
 
+	
 	public Pagination<${BNAME}> getPageAll${BNAME}(int pageIndex,int pageSize){
 		return ${BNAME_DAO_V}.getPageAll${BNAME}(pageIndex,pageSize);
 	}

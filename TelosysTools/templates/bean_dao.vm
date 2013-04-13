@@ -46,24 +46,31 @@
 #set ( $BEAN_V_KEY_GETTER = $BEAN_V_KEY_GETTER.substring(1) )
 ##主键变量集合，例如id1,id2,id3
 #set ( $SQL_KEY_NAMES = "" )
+#set ( $SQL_KEY_AS_NAMES = "" )
 ##主键变量集合占位符，例如id1,id2,id3 则得到?,?,?
 #set ( $SQL_KEY_NAMES_Q = "" )
 ##主键变量集合，例如city.getId1(),city.getId2()
 #set ( $SQL_KEY_BEAN_GETTER = "" )
 ##主键变量集合用于查询修改，例如id1=?,id2=?,id3=?
 #set ( $SQL_UPDATE_KEY_Q = "" )
+#set ( $SQL_SELECT_KEY_AS_Q = "" )
 #foreach($field in $beanClass.keyAttributes)
 #set ( $SQL_KEY_NAMES = $SQL_KEY_NAMES+ ","+$field.databaseName)
+#set ( $SQL_KEY_AS_NAMES = $SQL_KEY_AS_NAMES+ ","+${BNAME}+"."+$field.databaseName + " as " + $field.name)
 #set ( $SQL_KEY_NAMES_Q = $SQL_KEY_NAMES_Q+ ",?")
 #set ( $SQL_KEY_BEAN_GETTER = $SQL_KEY_BEAN_GETTER+ ","+$BNAME_V + "." + $field.getter+"()")
 #set ( $SQL_UPDATE_KEY_Q = $SQL_UPDATE_KEY_Q + " and $field.databaseName=?")
+#set ( $SQL_SELECT_KEY_AS_Q = $SQL_SELECT_KEY_AS_Q + " and "+${BNAME}+"."+"$field.databaseName=?")
 #end
 #set ( $SQL_KEY_NAMES = $SQL_KEY_NAMES.substring(1) )
+#set ( $SQL_KEY_AS_NAMES = $SQL_KEY_AS_NAMES.substring(1) )
 #set ( $SQL_KEY_NAMES_Q = $SQL_KEY_NAMES_Q.substring(1) )
 #set ( $SQL_KEY_BEAN_GETTER = $SQL_KEY_BEAN_GETTER.substring(1) )
 #set ( $SQL_UPDATE_KEY_Q = $SQL_UPDATE_KEY_Q.substring(4) )
+#set ( $SQL_SELECT_KEY_AS_Q = $SQL_SELECT_KEY_AS_Q.substring(4) )
 ##变量集合，例如id1,id2,id3
 #set ( $SQL_NOKEY_NAMES = "" )
+#set ( $SQL_NOKEY_AS_NAMES = "" )
 ##主键变量集合占位符，例如id1,id2,id3 则得到?,?,?
 #set ( $SQL_NOKEY_NAMES_Q = "" )
 ##主键变量集合，例如city.getId1(),city.getId2()
@@ -72,32 +79,36 @@
 #set ( $SQL_UPDATE_NOKEY_Q = "" )
 #foreach($field in $beanClass.nonKeyAttributes)
 #set ( $SQL_NOKEY_NAMES = $SQL_NOKEY_NAMES+ ","+$field.databaseName)
+#set ( $SQL_NOKEY_AS_NAMES = $SQL_NOKEY_AS_NAMES+ ","+${BNAME}+"."+$field.databaseName + " as " + $field.name)
 #set ( $SQL_NOKEY_NAMES_Q = $SQL_NOKEY_NAMES_Q+ ",?")
 #set ( $SQL_NOKEY_BEAN_GETTER = $SQL_NOKEY_BEAN_GETTER+ ","+$BNAME_V + "." + $field.getter+"()")
 #set ( $SQL_UPDATE_NOKEY_Q = $SQL_UPDATE_NOKEY_Q + ",$field.databaseName=?")
 #end
 #set ( $SQL_NOKEY_NAMES = $SQL_NOKEY_NAMES.substring(1) )
+#set ( $SQL_NOKEY_AS_NAMES = $SQL_NOKEY_AS_NAMES.substring(1) )
 #set ( $SQL_NOKEY_NAMES_Q = $SQL_NOKEY_NAMES_Q.substring(1) )
 #set ( $SQL_NOKEY_BEAN_GETTER = $SQL_NOKEY_BEAN_GETTER.substring(1) )
 #set ( $SQL_UPDATE_NOKEY_Q = $SQL_UPDATE_NOKEY_Q.substring(1) )
 #if  ($AUTO_INCR_KEY)
 ##插入语句  (id,name_id,cr_date) values(?,?,?)
-  #set ( $INSERT_SQL = "(" + $SQL_NOKEY_NAMES +")  values(" + $SQL_NOKEY_NAMES_Q +")")
+#set ( $INSERT_SQL = "(" + $SQL_NOKEY_NAMES +")  values(" + $SQL_NOKEY_NAMES_Q +")")
 ##插入语句参数  city.getId(),city.getNameid(),city.getCr_date()
-  #set ( $INSERT_SQL_PARM = $SQL_NOKEY_BEAN_GETTER)
+#set ( $INSERT_SQL_PARM = $SQL_NOKEY_BEAN_GETTER)
 #else
-  #set ( $INSERT_SQL = "("+$SQL_KEY_NAMES+","+$SQL_NOKEY_NAMES+")  values(" +$SQL_KEY_NAMES_Q+"," + $SQL_NOKEY_NAMES_Q +")")
-  #set ( $INSERT_SQL_PARM = $SQL_KEY_BEAN_GETTER + ","+$SQL_NOKEY_BEAN_GETTER)
+#set ( $INSERT_SQL = "("+$SQL_KEY_NAMES+","+$SQL_NOKEY_NAMES+")  values(" +$SQL_KEY_NAMES_Q+"," + $SQL_NOKEY_NAMES_Q +")")
+#set ( $INSERT_SQL_PARM = $SQL_KEY_BEAN_GETTER + ","+$SQL_NOKEY_BEAN_GETTER)
 #end
 ##更新时候传入的参数，主键值在最后
 #set ( $UPDATE_SQL_PARM = $SQL_NOKEY_BEAN_GETTER + ","+$SQL_KEY_BEAN_GETTER) 
 ## 更新时候，SQL语句中的 where id=? 
 #set ( $SQL_UPDATE_KEY_Q_WITHWHERE = " where " + $SQL_UPDATE_KEY_Q)
+#set ( $SQL_SELECT_BYKEY_Q_WITHWHERE = " as "+${BNAME}+" where " + $SQL_SELECT_KEY_AS_Q)
 ##更新时候set后面的语句
 #set ( $SQL_UPDATE_SET_TO_END = " set " +  "$SQL_UPDATE_NOKEY_Q" +  "$SQL_UPDATE_KEY_Q_WITHWHERE")
 ##
 #set ( $SQL_DELETE_WHERE_TO_END = " where " + $SQL_UPDATE_KEY_Q)
-#set ( $SQL_GET_BY_KEY = "select " + $SQL_KEY_NAMES + " ," + $SQL_NOKEY_NAMES + " from ")
+#set ( $SQL_GET_BY_KEY = "select " + $SQL_KEY_AS_NAMES + " ," + $SQL_NOKEY_AS_NAMES + " from ")
+#set ( $TABLE_WITH_AS = "TABLE" + ' +" as '+ ${BNAME}+ '" ')
 
 
 package ${target.javaPackageFromFolder($SRC)};
@@ -128,58 +139,111 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		this.getJdbcTemplate().update(sql, args);
         return $BEAN_V_KEY_GETTER;
 	}
-	
+	public $KEYS_TYPE insert${BNAME}Selective(${BNAME} $BNAME_V) throws Exception {
+		StringBuffer columns = new StringBuffer();
+		StringBuffer questions = new StringBuffer(30);
+		List<Object> params = new ArrayList<Object>();
+#if ( $AUTO_INCR_KEY == false )
+#foreach($field in $beanClass.keyAttributes)
+		if(${BNAME_V}.${field.getter}() != null){
+			params.add(${BNAME_V}.${field.getter}());
+#set ( $COMMA_FILED = "," + $field.databaseName)
+			columns.append("$COMMA_FILED");
+			questions.append(",?");
+		}
+#end
+#end	
+#foreach($field in $beanClass.nonKeyAttributes)
+		if(${BNAME_V}.${field.getter}() != null){
+			params.add(${BNAME_V}.${field.getter}());
+#set ( $COMMA_FILED = "," + $field.databaseName)
+			columns.append("$COMMA_FILED");
+			questions.append(",?");
+		}
+#end		
+		String sql = "insert into " + TABLE + "(" + columns.toString().substring(1) + ") values(" + questions.toString().substring(1) +")";
+		this.getJdbcTemplate().update(sql, params.toArray());
+		return $BEAN_V_KEY_GETTER;
+	}
 	
 	public void delete${BNAME}By$KEYS($KEYS_PAR) throws Exception {
 		String sql = "delete from " +TABLE +"$SQL_DELETE_WHERE_TO_END";
 		this.getJdbcTemplate().update(sql, new Object[] { $KEYS_PAR_NODECLARE });
 	}
+    
+	public void delete${BNAME}ByBean(${BNAME} $BNAME_V) throws Exception{
+		List<Object> params = new ArrayList<Object>();
+  		StringBuffer columns = new StringBuffer();
+#foreach($field in $beanClass.nonKeyAttributes)
+		if(${BNAME_V}.${field.getter}() != null){
+			params.add(${BNAME_V}.${field.getter}());
+#set ( $COMMA_FILED = "and " + $field.databaseName + "=? ")
+			columns.append("$COMMA_FILED");
+		}
+#end
+
+		String sql = "delete from " +TABLE + " where " +columns.toString().substring(4);
+	    this.getJdbcTemplate().update(sql,params.toArray());
+	}
 	
-
-
-
 	public void update${BNAME}(${BNAME} $BNAME_V) throws Exception {
 		String sql = "update " +TABLE +"$SQL_UPDATE_SET_TO_END";
 		Object args[] = new Object[] {$UPDATE_SQL_PARM};
 		this.getJdbcTemplate().update(sql, args);
 	}
 	
-	
-	
+	public void update${BNAME}Selective(${BNAME} $BNAME_V) throws Exception {
+		List<Object> params = new ArrayList<Object>();
+        StringBuffer columns = new StringBuffer();
+        String keys = "";
+#foreach($field in $beanClass.nonKeyAttributes)
+		if(${BNAME_V}.${field.getter}() != null){
+			params.add(${BNAME_V}.${field.getter}());
+#set ( $COMMA_FILED = "," + $field.databaseName +"=?")
+			columns.append("$COMMA_FILED");
+		}
+#end		
+
+#foreach($field in $beanClass.keyAttributes)
+		
+		if(${BNAME_V}.${field.getter}() != null){
+			params.add(${BNAME_V}.${field.getter}());
+#set ( $COMMA_FILED = "and " + $field.databaseName +"=? ")			
+			keys += "$COMMA_FILED";
+		}
+#end
+		String sql = "update " + TABLE + " set " +columns.toString().substring(1)+" where "+keys.substring(4);
+		this.getJdbcTemplate().update(sql, params.toArray());
+	}
+		
 	
 	public ${BNAME} get${BNAME}By$KEYS($KEYS_PAR) {
-		String sql = "$SQL_GET_BY_KEY"+TABLE+"$SQL_UPDATE_KEY_Q_WITHWHERE";
+		String sql = "$SQL_GET_BY_KEY"+TABLE+"$SQL_SELECT_BYKEY_Q_WITHWHERE";
 		List<${BNAME}> ${BNAME_V}List = this.getJdbcTemplate().query(sql,new Object[]{$KEYS_PAR_NODECLARE}, new ${BNAME}RowMapper());
 		return ${BNAME_V}List.size() > 0 ? ${BNAME_V}List.get(0) : null;
 
 	}
 	
-	public List<${BNAME}> getAll${BNAME}(){
-		String sql = "$SQL_GET_BY_KEY" + TABLE;		
-		return this.getJdbcTemplate().query(sql, new ${BNAME}RowMapper());
-		
-	}
-
 	public Collection<${BNAME}> getAll${BNAME}(Map<String, Object> parameter) {
-		String sql = "$SQL_GET_BY_KEY"+TABLE+" where 1=1 ";
+		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
 		StringBuffer sb = new StringBuffer(" ");
 		List<Object> params = new ArrayList<Object>();
 		boolean withParameter = false; 
 		if(parameter != null){
-	#foreach($field in $beanClass.keyAttributes)
+#foreach($field in $beanClass.keyAttributes)
             
 			if(parameter.get("$field.name")!=null){
 			    withParameter = true;    
-#set ( $CONDITION_ITEM = " and " + $field.databaseName + "=? " )
+#set ( $CONDITION_ITEM = " and " + ${BNAME}+"."+ $field.databaseName + "=? " )
 				sb.append("$CONDITION_ITEM");
 				params.add(parameter.get("$field.name"));
 			}
-            #end
-	#foreach($field in $beanClass.nonKeyAttributes)
+#end
+#foreach($field in $beanClass.nonKeyAttributes)
 
 			if(parameter.get("$field.name")!=null){
 			    withParameter = true;    
-#set ( $CONDITION_ITEM = " and " + $field.databaseName + "=? " )
+#set ( $CONDITION_ITEM = " and " + ${BNAME}+"."+ $field.databaseName + "=? " )
 				sb.append("$CONDITION_ITEM");
 				params.add(parameter.get("$field.name"));
 			}
@@ -193,28 +257,58 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		
 	}
 	
+	public Collection<${BNAME}> getAll${BNAME}ByBean(${BNAME} $BNAME_V) {
+		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
+		StringBuffer sb = new StringBuffer(" ");
+		List<Object> params = new ArrayList<Object>();
+		boolean withParameter = false; 
+#foreach($field in $beanClass.keyAttributes)
+            
+	    if(${BNAME_V}.${field.getter}() != null){
+		    withParameter = true;    
+#set ( $CONDITION_ITEM = " and " + ${BNAME}+"."+ $field.databaseName + "=? " )
+			sb.append("$CONDITION_ITEM");
+			params.add(${BNAME_V}.${field.getter}());
+		}
+#end
+#foreach($field in $beanClass.nonKeyAttributes)
+
+		if(${BNAME_V}.${field.getter}() != null){
+		    withParameter = true;    
+#set ( $CONDITION_ITEM = " and " + ${BNAME}+"."+ $field.databaseName + "=? " )
+			sb.append("$CONDITION_ITEM");
+			params.add(${BNAME_V}.${field.getter}());
+		}
+#end
+		if(withParameter){
+			return this.getJdbcTemplate().query(sql+ sb.toString(),params.toArray(), new ${BNAME}RowMapper());
+		}else{
+			return this.getJdbcTemplate().query(sql, new ${BNAME}RowMapper());
+		}
+		
+	}
 	
 	public Pagination<${BNAME}> getPageAll${BNAME}ByCondition(Map<String, Object> parameter, int pageIndex, int pageSize) {
-		String sql = "$SQL_GET_BY_KEY"+TABLE+" where 1=1 ";
-		String countSql = "select count(*) from "+TABLE+" where 1=1 ";
+		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
+		String countSql = "select count(*) from "+$TABLE_WITH_AS+" where 1=1 ";
 		StringBuffer sb = new StringBuffer(" ");
 		List<Object> params = new ArrayList<Object>();
 		boolean withParameter = false; 
 		if(parameter != null){
-	#foreach($field in $beanClass.keyAttributes)
+#foreach($field in $beanClass.keyAttributes)
 
 			if(parameter.get("$field.name")!=null){
 				withParameter = true;   
-#set ( $CONDITION_ITEM = " and " + $field.databaseName + "=? " )
+#set ( $CONDITION_ITEM = " and " + ${BNAME}+"."+$field.databaseName + "=? " )
 				sb.append("$CONDITION_ITEM");
 				params.add(parameter.get("$field.name"));
 			}
-            #end
-	#foreach($field in $beanClass.nonKeyAttributes)
+#end
+#foreach($field in $beanClass.nonKeyAttributes)
 
 			if(parameter.get("$field.name")!=null){
 			    withParameter = true;    
-#set ( $CONDITION_ITEM = " and " + $field.databaseName + "=? " )
+#set ( $CONDITION_ITEM = " and " + ${BNAME}+"."+$field.databaseName + "=? " )
 				sb.append("$CONDITION_ITEM");
 				params.add(parameter.get("$field.name"));
 			}
@@ -229,12 +323,51 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		return page;
 	}
 	
+	public Pagination<${BNAME}> getPageAll${BNAME}ByBean(${BNAME} $BNAME_V, int pageIndex, int pageSize) {
+		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
+		String countSql = "select count(*) from "+$TABLE_WITH_AS+" where 1=1 ";
+		StringBuffer sb = new StringBuffer(" ");
+		List<Object> params = new ArrayList<Object>();
+		boolean withParameter = false; 
+#foreach($field in $beanClass.keyAttributes)
+
+		if(${BNAME_V}.${field.getter}() != null){
+			withParameter = true;   
+#set ( $CONDITION_ITEM = " and " + ${BNAME}+"."+$field.databaseName + "=? " )
+			sb.append("$CONDITION_ITEM");
+			params.add(${BNAME_V}.${field.getter}());
+		}
+#end
+#foreach($field in $beanClass.nonKeyAttributes)
+
+		if(${BNAME_V}.${field.getter}() != null){
+		    withParameter = true;    
+#set ( $CONDITION_ITEM = " and " + ${BNAME}+"."+$field.databaseName + "=? " )
+			sb.append("$CONDITION_ITEM");
+			params.add(${BNAME_V}.${field.getter}());
+		}
+#end
+
+		Pagination<${BNAME}> page = new Pagination<${BNAME}>(pageIndex,pageSize);
+		if(withParameter){
+			this.paginationQuery(sql + sb.toString(),countSql + sb.toString(), params.toArray(), page,new ${BNAME}RowMapper());
+		}else{
+		    this.paginationQuery(sql,countSql ,page,new ${BNAME}RowMapper());
+		}
+		return page;
+	}
+	
+	public List<${BNAME}> getAll${BNAME}(){
+		String sql = "$SQL_GET_BY_KEY" + $TABLE_WITH_AS;		
+		return this.getJdbcTemplate().query(sql, new ${BNAME}RowMapper());
+		
+	}
 	
 	public Pagination<${BNAME}> getPageAll${BNAME}(int pageIndex, int pageSize) {
-		String sql ="$SQL_GET_BY_KEY" + TABLE;
+		String sql ="$SQL_GET_BY_KEY" + $TABLE_WITH_AS;
 		String countSql = "select count(*) from " + TABLE;
 		Pagination<${BNAME}> page = new Pagination<${BNAME}>(pageIndex,pageSize);
-		this.paginationQuery(sql,countSql,new Object[]{}, page,	new ${BNAME}RowMapper());
+		this.paginationQuery(sql,countSql, page,new ${BNAME}RowMapper());
 		return page;
 	}
 
@@ -243,11 +376,11 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 			${BNAME} ${BNAME_V} = new ${BNAME}();
 #foreach($field in $beanClass.keyAttributes)
 #set ( $getWithType = "get" + $field.type.substring(0,1).toUpperCase()+$field.type.substring(1))
-        	${BNAME_V}.${field.setter}(rs.${getWithType}("$field.databaseName"));
+        	${BNAME_V}.${field.setter}(rs.${getWithType}("$field.name"));
 #end	
 #foreach($field in $beanClass.nonKeyAttributes)
 #set ( $getWithType = "get" + $field.type.substring(0,1).toUpperCase()+$field.type.substring(1))
-			${BNAME_V}.${field.setter}(rs.${getWithType}("$field.databaseName"));
+			${BNAME_V}.${field.setter}(rs.${getWithType}("$field.name"));
 #end
 			return ${BNAME_V};
 		}

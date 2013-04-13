@@ -8,6 +8,7 @@
 package ${target.javaPackageFromFolder($SRC)} ;
 
 import java.io.Serializable;
+import java.util.List;
 
 #foreach( $import in $beanClass.imports )
 import $import;
