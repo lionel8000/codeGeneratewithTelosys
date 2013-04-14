@@ -1,6 +1,7 @@
-
 package com.hlj.tech.kdkj.auto.service ;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.hlj.tech.kdkj.auto.dao.TCityDao;
 import java.util.Collection;
 import java.util.List;
@@ -10,10 +11,11 @@ import com.bstek.bdf.pagination.Pagination;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class TCityServiceImpl implements TCityService{
-        
+
+    private static Logger log = LoggerFactory.getLogger(TCityServiceImpl.class);    
+
     @Resource
 	TCityDao tCityDao;
 
@@ -38,6 +40,7 @@ public class TCityServiceImpl implements TCityService{
 	}
 
   	public void updateTCitySelective(TCity tCity) throws Exception {
+	    tCityDao.updateTCitySelective(tCity);
     }
 	
 	public TCity getTCityById(Short id){

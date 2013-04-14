@@ -142,18 +142,18 @@ url    = "jdbc:sqlserver://10.226.156.26;databaseName=cqc"
 <!-- ============================================ -->
 <!-- The JDBC Driver is in "ojdbc14.jar" or "ojdbc5.jar (JDK 1.5) or "ojdbc6.jar" (JDK 1.6)
      ( or "classes12.jar" or "classes12.zip" for 8i ) -->
-<!--
-	<db id = "0" 
-		name   = "Oracle - TelosysBookStore DB" 
+
+	<db id = "1" 
+		name   = "Oracle - Telos DB" 
 		driver = "oracle.jdbc.driver.OracleDriver" 
-		url    = "jdbc:oracle:thin:@localhost:1521:bookstore"
+		url    = "jdbc:oracle:thin:@210.51.3.64:1521:orcl"
 		isolationLevel = "TRANSACTION_READ_COMMITTED" 
 		poolSize       = "3" >
-			<property name="user"      value="demo" />
-			<property name="password"  value="demo" />
-			<metadata catalog="" schema="BOOKSTORE" table-name-pattern="%" table-types="TABLE   VIEW  " />
+			<property name="user"      value="xhcf" />
+			<property name="password"  value="xhcf" />
+			<metadata catalog="" schema="orcl" table-name-pattern="%" table-types="TABLE   VIEW  " />
 	</db>		
--->
+
 
 <!-- ============================================ -->
 <!--           INTERSYSTEMS CACHE DB              -->

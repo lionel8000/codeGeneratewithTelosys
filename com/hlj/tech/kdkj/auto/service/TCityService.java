@@ -1,6 +1,3 @@
-
-
-
 package com.hlj.tech.kdkj.auto.service ;
 
 import java.util.Collection;
@@ -11,7 +8,6 @@ import com.hlj.tech.kdkj.auto.entities.TCity;
 import com.bstek.bdf.pagination.Pagination;
 
 public interface TCityService {
-
 
 	public Short insertTCity(TCity tCity) throws Exception;
 
@@ -38,6 +34,5 @@ public interface TCityService {
 	public Pagination<TCity> getPageAllTCityByBean(TCity tCity, int pageIndex, int pageSize);
 
 	public Pagination<TCity> getPageAllTCity(int pageIndex,int pageSize);
-
 
 }

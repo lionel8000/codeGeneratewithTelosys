@@ -22,9 +22,10 @@
 #end
 #set ( $KEYS_TYPE = $KEYS_TYPE.substring(1) )
 #set ( $BASE_PACKAGE = $beanClass.package.substring(0,$beanClass.package.lastIndexOf(".")))
-
 package ${target.javaPackageFromFolder($SRC)} ;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ${BASE_PACKAGE}.dao.$BNAME_DAO;
 import java.util.Collection;
 import java.util.List;
@@ -34,10 +35,11 @@ import com.bstek.bdf.pagination.Pagination;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class ${BNAME}ServiceImpl implements ${BNAME}Service{
-        
+
+    private static Logger log = LoggerFactory.getLogger(${BNAME}ServiceImpl.class);    
+
     @Resource
 	$BNAME_DAO $BNAME_DAO_V;
 
@@ -62,6 +64,7 @@ public class ${BNAME}ServiceImpl implements ${BNAME}Service{
 	}
 
   	public void update${BNAME}Selective(${BNAME} $BNAME_V) throws Exception {
+	    ${BNAME_DAO_V}.update${BNAME}Selective($BNAME_V);
     }
 	
 	public ${BNAME} get${BNAME}By$KEYS($KEYS_PAR){

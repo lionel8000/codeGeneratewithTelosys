@@ -252,7 +252,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		if(log.isDebugEnabled()){
 			log.debug("get${BNAME}By$KEYS : SQL IS : " + sql + " : PARAM IS : " + $KEYS_PAR_NODECLARE);
 		}
-		List<${BNAME}> ${BNAME_V}List = this.getJdbcTemplate().query(sql,new Object[]{$KEYS_PAR_NODECLARE}, ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
+		List<${BNAME}> ${BNAME_V}List = this.getJdbcTemplate().query(sql,new Object[]{$KEYS_PAR_NODECLARE}, new ${BNAME}RowMapper());
 		return ${BNAME_V}List.size() > 0 ? ${BNAME_V}List.get(0) : null;
 
 	}
@@ -287,9 +287,9 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 			log.debug("getAll${BNAME} : SQL IS : " + sql + sb.toString()+ " : PARAM IS : " + params.toArray());
 		}
 		if(withParameter){
-			return this.getJdbcTemplate().query(sql+ sb.toString(),params.toArray(), ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
+			return this.getJdbcTemplate().query(sql+ sb.toString(),params.toArray(), new ${BNAME}RowMapper());
 		}else{
-			return this.getJdbcTemplate().query(sql, ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
+			return this.getJdbcTemplate().query(sql, new ${BNAME}RowMapper());
 		}
 		
 	}
@@ -323,9 +323,9 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 			log.debug("getAll${BNAME}ByBean : SQL IS : " + sql + sb.toString()+ " : PARAM IS : " + params.toArray());
 		}
 		if(withParameter){
-			return this.getJdbcTemplate().query(sql+ sb.toString(),params.toArray(), ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
+			return this.getJdbcTemplate().query(sql+ sb.toString(),params.toArray(), new ${BNAME}RowMapper());
 		}else{
-			return this.getJdbcTemplate().query(sql, ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
+			return this.getJdbcTemplate().query(sql, new ${BNAME}RowMapper());
 		}
 		
 	}
@@ -364,9 +364,9 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 			log.debug("pageIndex : " + pageIndex + "   pageSize:  " + pageSize);
 		}
 		if(withParameter){
-			this.paginationQuery(sql + sb.toString(),countSql + sb.toString(), params.toArray(), page,ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
+			this.paginationQuery(sql + sb.toString(),countSql + sb.toString(), params.toArray(), page,new ${BNAME}RowMapper());
 		}else{
-		    this.paginationQuery(sql,countSql ,page,ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
+		    this.paginationQuery(sql,countSql ,page,new ${BNAME}RowMapper());
 		}
 		return page;
 	}
@@ -404,9 +404,9 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 			log.debug("pageIndex : " + pageIndex + "   pageSize:  " + pageSize);
 		}
 		if(withParameter){
-			this.paginationQuery(sql + sb.toString(),countSql + sb.toString(), params.toArray(), page,ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
+			this.paginationQuery(sql + sb.toString(),countSql + sb.toString(), params.toArray(), page,new ${BNAME}RowMapper());
 		}else{
-		    this.paginationQuery(sql,countSql ,page,ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
+		    this.paginationQuery(sql,countSql ,page,new ${BNAME}RowMapper());
 		}
 		return page;
 	}
@@ -415,7 +415,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	
 	public List<${BNAME}> getAll${BNAME}(){
 		String sql = "$SQL_GET_BY_KEY" + $TABLE_WITH_AS;			
-		return this.getJdbcTemplate().query(sql, ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
+		return this.getJdbcTemplate().query(sql, new ${BNAME}RowMapper());
 		
 	}
 	
@@ -425,7 +425,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		String sql ="$SQL_GET_BY_KEY" + $TABLE_WITH_AS;
 		String countSql = "select count(*) from " + TABLE;
 		Pagination<${BNAME}> page = new Pagination<${BNAME}>(pageIndex,pageSize);
-		this.paginationQuery(sql,countSql, page,ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
+		this.paginationQuery(sql,countSql, page,new ${BNAME}RowMapper());
 		return page;
 	}
 	

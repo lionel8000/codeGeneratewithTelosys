@@ -1,18 +1,16 @@
-
-
-
 package com.hlj.tech.kdkj.auto.manager;
-import com.hlj.tech.kdkj.auto.entities.TCity;
 
+import com.hlj.tech.kdkj.auto.entities.TCity;
 import com.hlj.tech.kdkj.auto.service.TCityService;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Component;
-
 import com.bstek.bdf.pagination.Pagination;
 import com.bstek.dorado.annotation.DataProvider;
 import com.bstek.dorado.annotation.DataResolver;
@@ -24,7 +22,9 @@ import com.bstek.dorado.data.provider.Page;
 
 @Component("cityManagerPR")
 public class TCityManagerPR{
-	
+   
+   private static Logger log = LoggerFactory.getLogger(TCityManagerPR.class);  
+
 	@Autowired
 	private TCityService tCityService;
 	
@@ -69,10 +69,10 @@ public class TCityManagerPR{
 			TCity tCity=iter.next();
 			EntityState state=EntityUtils.getState(tCity);
 			if(state.equals(EntityState.NEW)){
-				tCityService.insertTCity(tCity);
+				tCityService.insertTCitySelective(tCity);
 			}
 			if(state.equals(EntityState.MODIFIED)){
-				tCityService.updateTCity(tCity);
+				tCityService.updateTCitySelective(tCity);
 			}
 			if(state.equals(EntityState.DELETED)){
 				tCityService.deleteTCityById(tCity.getId());

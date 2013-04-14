@@ -11,19 +11,16 @@
 #set ( $KEYS_PAR = $KEYS_PAR+ "," + $field.type +" " + $field.name )
 #end
 #set ( $KEYS_PAR = $KEYS_PAR.substring(1) )
-
 #set ( $KEYS_PAR_BEAN = "" )
 #foreach($field in $beanClass.keyAttributes)
 #set ( $KEYS_PAR_BEAN = $KEYS_PAR_BEAN+ "," + $BNAME_V +"." + $field.getter+"()" )
 #end
 #set ( $KEYS_PAR_BEAN = $KEYS_PAR_BEAN.substring(1) )
-
 #set ( $KEYS_TYPE = "" )
 #foreach($field in $beanClass.keyAttributes)
 #set ( $KEYS_TYPE = $KEYS_TYPE+ "," + $field.type)
 #end
 #set ( $KEYS_TYPE = $KEYS_TYPE.substring(1) )
-
 #set ( $KEYS_PAR_NODECLARE = "" )
 #foreach($field in $beanClass.keyAttributes)
 #set ( $KEYS_PAR_NODECLARE = $KEYS_PAR_NODECLARE+ ","+$field.name )
@@ -33,17 +30,18 @@
 #set ( $BNAME_SRPING_NAME = $BNAME.substring(1))
 #set ( $$BNAME_SRPING_NAME = $$BNAME_SRPING_NAME.substring(0,1).toLowerCase() + $$BNAME_SRPING_NAME.substring(1))
 package ${target.javaPackageFromFolder($SRC)};
-import $beanClass.fullName;
 
+import $beanClass.fullName;
 import ${BASE_PACKAGE}.service.${BNAME}Service;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Component;
-
 import com.bstek.bdf.pagination.Pagination;
 import com.bstek.dorado.annotation.DataProvider;
 import com.bstek.dorado.annotation.DataResolver;
@@ -55,7 +53,9 @@ import com.bstek.dorado.data.provider.Page;
 
 @Component("${BNAME_SRPING_NAME}ManagerPR")
 public class ${BNAME}ManagerPR{
-	
+   
+   private static Logger log = LoggerFactory.getLogger(${BNAME}ManagerPR.class);  
+
 	@Autowired
 	private ${BNAME}Service ${BNAME_V}Service;
 	
@@ -100,10 +100,10 @@ public class ${BNAME}ManagerPR{
 			$BNAME $BNAME_V=iter.next();
 			EntityState state=EntityUtils.getState($BNAME_V);
 			if(state.equals(EntityState.NEW)){
-				${BNAME_V}Service.insert$BNAME($BNAME_V);
+				${BNAME_V}Service.insert${BNAME}Selective($BNAME_V);
 			}
 			if(state.equals(EntityState.MODIFIED)){
-				${BNAME_V}Service.update$BNAME($BNAME_V);
+				${BNAME_V}Service.update${BNAME}Selective($BNAME_V);
 			}
 			if(state.equals(EntityState.DELETED)){
 				${BNAME_V}Service.delete${BNAME}By$KEYS($KEYS_PAR_BEAN);
