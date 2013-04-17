@@ -131,7 +131,8 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
     private static Logger log = LoggerFactory.getLogger(${BNAME}Dao.class);  
 
     private static String TABLE = "${beanClass.sqlTable}";
-
+	
+	@Deprecated
 	public $KEYS_TYPE insert${BNAME}(${BNAME} $BNAME_V) throws Exception {
 		String sql = "insert into "+TABLE +"$INSERT_SQL";
 		Object args[] = new Object[] { $INSERT_SQL_PARM };
@@ -263,7 +264,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	}
 	
 	
-	
+	@Deprecated
 	public void update${BNAME}(${BNAME} $BNAME_V) throws Exception {
 		String sql = "update " +TABLE +"$SQL_UPDATE_SET_TO_END";
 		Object args[] = new Object[] {$UPDATE_SQL_PARM};

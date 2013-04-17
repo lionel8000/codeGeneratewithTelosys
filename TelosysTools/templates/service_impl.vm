@@ -42,7 +42,8 @@ public class ${BNAME}ServiceImpl implements ${BNAME}Service{
 
     @Resource
 	$BNAME_DAO $BNAME_DAO_V;
-
+    
+	@Deprecated
 	public $KEYS_TYPE insert${BNAME}(${BNAME} $BNAME_V) throws Exception{
 	    return ${BNAME_DAO_V}.insert${BNAME}($BNAME_V);
 	}
@@ -51,14 +52,16 @@ public class ${BNAME}ServiceImpl implements ${BNAME}Service{
 	    return ${BNAME_DAO_V}.insert${BNAME}Selective($BNAME_V);
 	}
 	
+	
 	public void delete${BNAME}By$KEYS($KEYS_PAR) throws Exception{
 		${BNAME_DAO_V}.delete${BNAME}By$KEYS($KEYS_PAR_NODECLARE);
 	}
 
 	public void delete${BNAME}ByBean(${BNAME} $BNAME_V) throws Exception{
 		${BNAME_DAO_V}.delete${BNAME}ByBean($BNAME_V);
-	}	
+	}
 	
+	@Deprecated
 	public void update${BNAME}(${BNAME} $BNAME_V) throws Exception{
 		${BNAME_DAO_V}.update${BNAME}($BNAME_V);
 	}

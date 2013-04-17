@@ -24,7 +24,8 @@ import $beanClass.fullName;
 import com.bstek.bdf.pagination.Pagination;
 
 public interface ${BNAME}Service {
-
+ 
+	@Deprecated
 	public $KEYS_TYPE insert${BNAME}(${BNAME} $BNAME_V) throws Exception;
 
 	public $KEYS_TYPE insert${BNAME}Selective(${BNAME} $BNAME_V) throws Exception;
@@ -33,6 +34,7 @@ public interface ${BNAME}Service {
 	
 	public void delete${BNAME}ByBean(${BNAME} $BNAME_V) throws Exception;
 
+	@Deprecated
 	public void update${BNAME}(${BNAME} $BNAME_V) throws Exception;
 
    	public void update${BNAME}Selective(${BNAME} $BNAME_V) throws Exception;
