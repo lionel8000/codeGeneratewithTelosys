@@ -136,7 +136,12 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		if(log.isDebugEnabled()){
 			log.debug("insert${BNAME} : SQL IS : " + sql + " : PARAM IS : " + args);
 		}
-		this.getJdbcTemplate().update(sql, args);		
+		this.getJdbcTemplate().update(sql, args);
+#if ( $AUTO_INCR_KEY == true )
+#foreach($field in $beanClass.keyAttributes)
+		${BNAME_V}.${field.setter}(this.getJdbcTemplate().queryForInt("select last_insert_id()"));
+#end
+#end		
         return $BEAN_V_KEY_GETTER;
 	}
 
@@ -169,6 +174,11 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 			log.debug("insert${BNAME}Selective : SQL IS : " + sql + " : PARAM IS : " + params.toArray());
 		}
 		this.getJdbcTemplate().update(sql, params.toArray());
+#if ( $AUTO_INCR_KEY == true )
+#foreach($field in $beanClass.keyAttributes)
+		${BNAME_V}.${field.setter}(this.getJdbcTemplate().queryForInt("select last_insert_id()"));
+#end
+#end
 		return $BEAN_V_KEY_GETTER;
 	}
 	
@@ -443,6 +453,9 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 #end	
 #foreach($field in $beanClass.nonKeyAttributes)
 #set ( $getWithType = "get" + $field.type.substring(0,1).toUpperCase()+$field.type.substring(1))
+#if ($field.type == "Integer")
+#set ( $getWithType = "getInt" )
+#end
 			${BNAME_V}.${field.setter}(rs.${getWithType}("$field.name"));
 #end
 			return ${BNAME_V};
