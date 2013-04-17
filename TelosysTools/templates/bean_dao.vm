@@ -118,6 +118,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
 import com.bstek.bdf.pagination.CoreJdbcDaoSupport;
 import com.bstek.bdf.pagination.Pagination;
+import com.bstek.bdf.context.ContextHolder;
+
 
 /**
  * @author lionel.xu@bstek.com
@@ -161,19 +163,65 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		}
 #end
 #end	
+
+
 #foreach($field in $beanClass.nonKeyAttributes)
+#set ( $FILEDNAME = ${field.name})
+#set ( $COMMA_FILED = "," + $field.databaseName)
+#if ($FILEDNAME.indexOf("createDate") == 0)
 		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
 			params.add(${BNAME_V}.${field.getter}());
-#set ( $COMMA_FILED = "," + $field.databaseName)
+			columns.append("$COMMA_FILED");
+			questions.append(",?");
+		}else{
+			columns.append("$COMMA_FILED");
+			questions.append(",now()");
+		}
+#elseif ($FILEDNAME.indexOf("updateDate") == 0)
+		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
+			params.add(${BNAME_V}.${field.getter}());
+			columns.append("$COMMA_FILED");
+			questions.append(",?");
+		}else{
+			columns.append("$COMMA_FILED");
+			questions.append(",now()");
+		}
+#elseif ($FILEDNAME.indexOf("createBy") == 0)
+		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
+			params.add(${BNAME_V}.${field.getter}());
+			columns.append("$COMMA_FILED");
+			questions.append(",?");
+		}else{
+			params.add(ContextHolder.getContext().getLoginUsername());
+			columns.append("$COMMA_FILED");
+			questions.append(",now()");
+		}
+#elseif ($FILEDNAME.indexOf("updateBy") == 0)
+		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
+			params.add(${BNAME_V}.${field.getter}());
+			columns.append("$COMMA_FILED");
+			questions.append(",?");
+		}else{
+			params.add(ContextHolder.getContext().getLoginUsername());
 			columns.append("$COMMA_FILED");
 			questions.append(",?");
 		}
+#else 
+		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
+			params.add(${BNAME_V}.${field.getter}());
+			columns.append("$COMMA_FILED");
+			questions.append(",?");
+		}
+#end
 #end		
 		String sql = "insert into " + TABLE + "(" + columns.toString().substring(1) + ") values(" + questions.toString().substring(1) +")";
 		if(log.isDebugEnabled()){
 			log.debug("insert${BNAME}Selective : SQL IS : " + sql + " : PARAM IS : " + params.toArray());
 		}
 		this.getJdbcTemplate().update(sql, params.toArray());
+		
+		
+		
 #if ( $AUTO_INCR_KEY == true )
 #foreach($field in $beanClass.keyAttributes)
 		${BNAME_V}.${field.setter}(this.getJdbcTemplate().queryForInt("select last_insert_id()"));
@@ -232,11 +280,30 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
         StringBuffer columns = new StringBuffer();
         String keys = "";
 #foreach($field in $beanClass.nonKeyAttributes)
+#set ( $FILEDNAME = ${field.name})
+#set ( $COMMA_FILED = "," + $field.databaseName +"=?")
+#if ($FILEDNAME.indexOf("updateDate") == 0)
 		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
 			params.add(${BNAME_V}.${field.getter}());
-#set ( $COMMA_FILED = "," + $field.databaseName +"=?")
+			columns.append("$COMMA_FILED");
+		}else{
+#set ( $COMMA_FILED = "," + $field.databaseName +"=now()")
+   			columns.append("$COMMA_FILED");
+		}
+#elseif ($FILEDNAME.indexOf("updateBy") == 0)
+		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
+			params.add(${BNAME_V}.${field.getter}());
+			columns.append("$COMMA_FILED");
+		}else{
+			params.add(ContextHolder.getContext().getLoginUsername());
 			columns.append("$COMMA_FILED");
 		}
+#else
+		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
+			params.add(${BNAME_V}.${field.getter}());
+			columns.append("$COMMA_FILED");
+		}
+#end
 #end		
 
 #foreach($field in $beanClass.keyAttributes)
