@@ -133,7 +133,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
     private static String TABLE = "${beanClass.sqlTable}";
 	
 	@Deprecated
-	public $KEYS_TYPE insert${BNAME}(${BNAME} $BNAME_V) throws Exception {
+	public $KEYS_TYPE insert(${BNAME} $BNAME_V) throws Exception {
 		String sql = "insert into "+TABLE +"$INSERT_SQL";
 		Object args[] = new Object[] { $INSERT_SQL_PARM };
 		if(log.isDebugEnabled()){
@@ -142,7 +142,13 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		this.getJdbcTemplate().update(sql, args);
 #if ( $AUTO_INCR_KEY == true )
 #foreach($field in $beanClass.keyAttributes)
+#set ($AUTOKEYFILENAME = $field.type )
+#if ( $AUTOKEYFILENAME == "Integer")
 		${BNAME_V}.${field.setter}(this.getJdbcTemplate().queryForInt("select last_insert_id()"));
+#else
+#set ( $KEYCAST = $AUTOKEYFILENAME.substring(0,1).toLowerCase() + $AUTOKEYFILENAME.substring(1))
+		${BNAME_V}.${field.setter}(($KEYCAST)this.getJdbcTemplate().queryForInt("select last_insert_id()"));
+#end
 #end
 #end		
         return $BEAN_V_KEY_GETTER;
@@ -150,7 +156,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 
 	
 	
-	public $KEYS_TYPE insert${BNAME}Selective(${BNAME} $BNAME_V) throws Exception {
+	public $KEYS_TYPE insertSelective(${BNAME} $BNAME_V) throws Exception {
 		StringBuffer columns = new StringBuffer();
 		StringBuffer questions = new StringBuffer(30);
 		List<Object> params = new ArrayList<Object>();
@@ -221,11 +227,15 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		}
 		this.getJdbcTemplate().update(sql, params.toArray());
 		
-		
-		
 #if ( $AUTO_INCR_KEY == true )
 #foreach($field in $beanClass.keyAttributes)
+#set ($AUTOKEYFILENAME = $field.type )
+#if ( $AUTOKEYFILENAME == "Integer")
 		${BNAME_V}.${field.setter}(this.getJdbcTemplate().queryForInt("select last_insert_id()"));
+#else
+#set ( $KEYCAST = $AUTOKEYFILENAME.substring(0,1).toLowerCase() + $AUTOKEYFILENAME.substring(1))
+		${BNAME_V}.${field.setter}(($KEYCAST)this.getJdbcTemplate().queryForInt("select last_insert_id()"));
+#end
 #end
 #end
 		return $BEAN_V_KEY_GETTER;
@@ -233,7 +243,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	
 	
 	
-	public void delete${BNAME}By$KEYS($KEYS_PAR) throws Exception {
+	public void deleteBy$KEYS($KEYS_PAR) throws Exception {
 		String sql = "delete from " +TABLE +"$SQL_DELETE_WHERE_TO_END";
 		Object args[] = new Object[] {$KEYS_PAR_NODECLARE};
 
@@ -245,7 +255,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	
 	
     
-	public void delete${BNAME}ByBean(${BNAME} $BNAME_V) throws Exception{
+	public void deleteByBean(${BNAME} $BNAME_V) throws Exception{
 		List<Object> params = new ArrayList<Object>();
   		StringBuffer columns = new StringBuffer();
 #foreach($field in $beanClass.nonKeyAttributes)
@@ -265,7 +275,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	
 	
 	@Deprecated
-	public void update${BNAME}(${BNAME} $BNAME_V) throws Exception {
+	public void update(${BNAME} $BNAME_V) throws Exception {
 		String sql = "update " +TABLE +"$SQL_UPDATE_SET_TO_END";
 		Object args[] = new Object[] {$UPDATE_SQL_PARM};
 		if(log.isDebugEnabled()){
@@ -276,7 +286,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	
 	
 	
-	public void update${BNAME}Selective(${BNAME} $BNAME_V) throws Exception {
+	public void updateSelective(${BNAME} $BNAME_V) throws Exception {
 		List<Object> params = new ArrayList<Object>();
         StringBuffer columns = new StringBuffer();
         String keys = "";
@@ -325,7 +335,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	
 		
 	
-	public ${BNAME} get${BNAME}By$KEYS($KEYS_PAR) {
+	public ${BNAME} getBy$KEYS($KEYS_PAR) {
 		String sql = "$SQL_GET_BY_KEY"+TABLE+"$SQL_SELECT_BYKEY_Q_WITHWHERE";
 		if(log.isDebugEnabled()){
 			log.debug("get${BNAME}By$KEYS : SQL IS : " + sql + " : PARAM IS : " + $KEYS_PAR_NODECLARE);
@@ -337,7 +347,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	
 	
 	
-	public Collection<${BNAME}> getAll${BNAME}(Map<String, Object> parameter) {
+	public Collection<${BNAME}> getAll(Map<String, Object> parameter) {
 		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
 		StringBuffer sb = new StringBuffer(" ");
 		List<Object> params = new ArrayList<Object>();
@@ -374,7 +384,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	
 	
 	
-	public Collection<${BNAME}> getAll${BNAME}ByBean(${BNAME} $BNAME_V) {
+	public Collection<${BNAME}> getAllByBean(${BNAME} $BNAME_V) {
 		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
 		StringBuffer sb = new StringBuffer(" ");
 		List<Object> params = new ArrayList<Object>();
@@ -410,7 +420,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	
 	
 	
-	public Pagination<${BNAME}> getPageAll${BNAME}ByCondition(Map<String, Object> parameter, int pageIndex, int pageSize) {
+	public Pagination<${BNAME}> getPageAllByCondition(Map<String, Object> parameter, int pageIndex, int pageSize) {
 		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
 		String countSql = "select count(*) from "+$TABLE_WITH_AS+" where 1=1 ";
 		StringBuffer sb = new StringBuffer(" ");
@@ -451,7 +461,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	
 	
 	
-	public Pagination<${BNAME}> getPageAll${BNAME}ByBean(${BNAME} $BNAME_V, int pageIndex, int pageSize) {
+	public Pagination<${BNAME}> getPageAllByBean(${BNAME} $BNAME_V, int pageIndex, int pageSize) {
 		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
 		String countSql = "select count(*) from "+$TABLE_WITH_AS+" where 1=1 ";
 		StringBuffer sb = new StringBuffer(" ");
@@ -491,7 +501,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	
 	
 	
-	public List<${BNAME}> getAll${BNAME}(){
+	public List<${BNAME}> getAll(){
 		String sql = "$SQL_GET_BY_KEY" + $TABLE_WITH_AS;			
 		return this.getJdbcTemplate().query(sql, ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
 		
@@ -499,7 +509,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	
 	
 	
-	public Pagination<${BNAME}> getPageAll${BNAME}(int pageIndex, int pageSize) {
+	public Pagination<${BNAME}> getPageAll(int pageIndex, int pageSize) {
 		String sql ="$SQL_GET_BY_KEY" + $TABLE_WITH_AS;
 		String countSql = "select count(*) from " + TABLE;
 		Pagination<${BNAME}> page = new Pagination<${BNAME}>(pageIndex,pageSize);

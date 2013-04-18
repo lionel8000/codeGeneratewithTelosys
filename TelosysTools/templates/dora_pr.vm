@@ -41,7 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Component;
 import com.bstek.bdf.pagination.Pagination;
 import com.bstek.dorado.annotation.DataProvider;
 import com.bstek.dorado.annotation.DataResolver;
@@ -66,33 +65,33 @@ public class ${BNAME}ManagerPR{
 	 * @return
 	 * @throws Exception
 	 */
-	//${BNAME_SRPING_NAME}ManagerPR#getAll${BNAME}
+	//${BNAME_SRPING_NAME}ManagerPR#getAll
 	@DataProvider
-	public Collection<$BNAME> getAll${BNAME}(Map<String, Object> parameter) throws Exception{
+	public Collection<$BNAME> getAll(Map<String, Object> parameter) throws Exception{
 		if(!this.hasParameter(parameter)){
-			return ${BNAME_V}Service.getAll$BNAME();
+			return ${BNAME_V}Service.getAll();
 		}else{
-			return ${BNAME_V}Service.getAll$BNAME(parameter);
+			return ${BNAME_V}Service.getAll(parameter);
 		}
 	}
 	
-   	//${BNAME_SRPING_NAME}ManagerPR#getPageAll${BNAME}
+   	//${BNAME_SRPING_NAME}ManagerPR#getPageAll
 	@DataProvider
-	public void getPageAll${BNAME}(Page<$BNAME> page, Map<String, Object> parameter) throws Exception{
+	public void getPageAll(Page<$BNAME> page, Map<String, Object> parameter) throws Exception{
 
 	    Pagination<${BNAME}> p = null;
 		if(!this.hasParameter(parameter)){
-			p=${BNAME_V}Service.getPageAll$BNAME( page.getPageNo(), page.getPageSize());
+			p=${BNAME_V}Service.getPageAll( page.getPageNo(), page.getPageSize());
 		}else{
-			p=${BNAME_V}Service.getPageAll${BNAME}ByCondition(parameter,page.getPageNo(), page.getPageSize());	
+			p=${BNAME_V}Service.getPageAllByCondition(parameter,page.getPageNo(), page.getPageSize());	
 		}
 		page.setEntities(p.getResults());
 		page.setEntityCount(p.getTotalCount());
 	}
 
-	//${BNAME_SRPING_NAME}ManagerPR#saveAll${BNAME}
+	//${BNAME_SRPING_NAME}ManagerPR#saveAll
 	@DataResolver
-	public void saveAll${BNAME}(Collection<$BNAME> coll) throws Exception{
+	public void saveAll(Collection<$BNAME> coll) throws Exception{
 		
 		@SuppressWarnings("unchecked")
 		Iterator<$BNAME> iter=EntityUtils.getIterator(coll, FilterType.DIRTY);
@@ -100,13 +99,13 @@ public class ${BNAME}ManagerPR{
 			$BNAME $BNAME_V=iter.next();
 			EntityState state=EntityUtils.getState($BNAME_V);
 			if(state.equals(EntityState.NEW)){
-				${BNAME_V}Service.insert${BNAME}Selective($BNAME_V);
+				${BNAME_V}Service.insertSelective($BNAME_V);
 			}
 			if(state.equals(EntityState.MODIFIED)){
-				${BNAME_V}Service.update${BNAME}Selective($BNAME_V);
+				${BNAME_V}Service.updateSelective($BNAME_V);
 			}
 			if(state.equals(EntityState.DELETED)){
-				${BNAME_V}Service.delete${BNAME}By$KEYS($KEYS_PAR_BEAN);
+				${BNAME_V}Service.deleteBy$KEYS($KEYS_PAR_BEAN);
 			}
 		}
 	}
