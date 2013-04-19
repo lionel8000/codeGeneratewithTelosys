@@ -1,0 +1,142 @@
+Update date : Fri Apr 19 10:49:10 CST 2013
+ 
+ Table 'bdf_blob_store' found in repository
+ (=) table 'bdf_blob_store' unchanged
+ 
+ Table 'bdf_clob_store' found in repository
+ (=) table 'bdf_clob_store' unchanged
+ 
+ Table 'bdf_companys' found in repository
+ (=) table 'bdf_companys' unchanged
+ 
+ Table 'bdf_component_members' found in repository
+ (=) table 'bdf_component_members' unchanged
+ 
+ Table 'bdf_component_resources' found in repository
+ (=) table 'bdf_component_resources' unchanged
+ 
+ Table 'bdf_data_auth' found in repository
+ (=) table 'bdf_data_auth' unchanged
+ 
+ Table 'bdf_data_log' found in repository
+ (=) table 'bdf_data_log' unchanged
+ 
+ Table 'bdf_depts' found in repository
+ (=) table 'bdf_depts' unchanged
+ 
+ Table 'bdf_enum_categorys' found in repository
+ (=) table 'bdf_enum_categorys' unchanged
+ 
+ Table 'bdf_enums' found in repository
+ (=) table 'bdf_enums' unchanged
+ 
+ Table 'bdf_group_members' found in repository
+ (=) table 'bdf_group_members' unchanged
+ 
+ Table 'bdf_groups' found in repository
+ (=) table 'bdf_groups' unchanged
+ 
+ Table 'bdf_menu_resources' found in repository
+ (=) table 'bdf_menu_resources' unchanged
+ 
+ Table 'bdf_message_template_use' found in repository
+ (=) table 'bdf_message_template_use' unchanged
+ 
+ Table 'bdf_message_templates' found in repository
+ (=) table 'bdf_message_templates' unchanged
+ 
+ Table 'bdf_module_resources' found in repository
+ (=) table 'bdf_module_resources' unchanged
+ 
+ Table 'bdf_preferences' found in repository
+ (=) table 'bdf_preferences' unchanged
+ 
+ Table 'bdf_resource_allocation' found in repository
+ (=) table 'bdf_resource_allocation' unchanged
+ 
+ Table 'bdf_resource_owner' found in repository
+ (=) table 'bdf_resource_owner' unchanged
+ 
+ Table 'bdf_resource_roles' found in repository
+ (=) table 'bdf_resource_roles' unchanged
+ 
+ Table 'bdf_role_members' found in repository
+ (=) table 'bdf_role_members' unchanged
+ 
+ Table 'bdf_roles' found in repository
+ (=) table 'bdf_roles' unchanged
+ 
+ Table 'bdf_short_message' found in repository
+ (=) table 'bdf_short_message' unchanged
+ 
+ Table 'bdf_short_message_receiver' found in repository
+ (=) table 'bdf_short_message_receiver' unchanged
+ 
+ Table 'bdf_upload_info' found in repository
+ (=) table 'bdf_upload_info' unchanged
+ 
+ Table 'bdf_user_depts' found in repository
+ (=) table 'bdf_user_depts' unchanged
+ 
+ Table 'bdf_users' found in repository
+ (=) table 'bdf_users' unchanged
+ 
+ Table 'bdf_variables' found in repository
+ (=) table 'bdf_variables' unchanged
+ 
+ Table 'bdf_webservice_resources' found in repository
+ (=) table 'bdf_webservice_resources' unchanged
+ 
+ Table 'category' found in repository
+ (=) table 'category' unchanged
+ 
+ Table 'customer' found in repository
+ (=) table 'customer' unchanged
+ 
+ Table 'goods' found in repository
+ (=) table 'goods' unchanged
+ 
+ Table 'operator' found in repository
+ (=) table 'operator' unchanged
+ 
+ Table 'producer' found in repository
+ (=) table 'producer' unchanged
+ 
+ Table 'purchasing' found in repository
+ (=) table 'purchasing' unchanged
+ 
+ Table 'sell' found in repository
+ (=) table 'sell' unchanged
+ 
+ Table 't_city' found in repository
+ (=) table 't_city' unchanged
+ 
+ Table 't_customer' found in repository
+ (=) table 't_customer' unchanged
+ 
+ Table 't_loan' found in repository
+ (=) table 't_loan' unchanged
+ 
+ Table 't_loan_boss' found in repository
+ (=) table 't_loan_boss' unchanged
+ 
+ Table 't_loan_consult' found in repository
+ (=) table 't_loan_consult' unchanged
+ 
+ Table 't_loan_house' found in repository
+ (=) table 't_loan_house' unchanged
+ 
+ Table 't_loan_vechicle' found in repository
+ (=) table 't_loan_vechicle' unchanged
+ 
+ Table 't_province' found in repository
+ (=) table 't_province' unchanged
+ 
+ Table 't_spousefriend' found in repository
+ (=) table 't_spousefriend' unchanged
+ 
+ Table 't_student' found in repository
+ (=) table 't_student' unchanged
+ 
+ Table 'v_loan_consult' found in repository
+ (=) table 'v_loan_consult' unchanged

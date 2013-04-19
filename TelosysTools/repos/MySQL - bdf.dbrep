@@ -748,5 +748,11 @@
 <column dateType="D" dbDefaultValue="" dbName="birthday" dbNotNull="false" dbPosition="4" dbSize="0" dbTypeName="date" inputType="date" javaName="birthday" javaType="java.util.Date" jdbcTypeCode="91" label="Birthday" notNull="false" selected="true"/>
 <column dateType="DT" dbDefaultValue="" dbName="create_date" dbNotNull="false" dbPosition="4" dbSize="0" dbTypeName="datetime" inputType="" javaName="createDate" javaType="java.util.Date" jdbcTypeCode="93" label="Create Date" notNull="false" selected="true"/>
 </table>
+<table catalog="bdf" javaBean="VLoanConsult" javaBeanConv="" javaBeanDAO="" javaBeanList="" name="v_loan_consult" schema="">
+<column dbAutoIncremented="true" dbDefaultValue="0" dbName="loan_id" dbNotNull="true" dbPosition="1" dbSize="10" dbTypeName="int" inputType="number" javaDefaultValue="0" javaName="loanId" javaType="int" jdbcTypeCode="4" label="Loan Id" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="userName" dbNotNull="false" dbPosition="2" dbSize="50" dbTypeName="varchar" inputType="text" javaName="username" javaType="java.lang.String" jdbcTypeCode="12" label="Username" maxLength="50" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="city" dbNotNull="false" dbPosition="3" dbSize="15" dbTypeName="varchar" inputType="text" javaName="city" javaType="java.lang.String" jdbcTypeCode="12" label="City" maxLength="15" notNull="false" selected="true"/>
+<column dbDefaultValue="" dbName="name" dbNotNull="false" dbPosition="4" dbSize="50" dbTypeName="varchar" inputType="text" javaName="name" javaType="java.lang.String" jdbcTypeCode="12" label="Name" maxLength="50" notNull="false" selected="true"/>
+</table>
 </tableList>
 </root>

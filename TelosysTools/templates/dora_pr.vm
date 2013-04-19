@@ -56,7 +56,7 @@ public class ${BNAME}ManagerPR{
    private static Logger log = LoggerFactory.getLogger(${BNAME}ManagerPR.class);  
 
 	@Autowired
-	private ${BNAME}Service ${BNAME_V}Service;
+	private ${BNAME}Dao ${BNAME_V}Dao;
 	
 	/**
 	 * 
@@ -69,9 +69,9 @@ public class ${BNAME}ManagerPR{
 	@DataProvider
 	public Collection<$BNAME> getAll(Map<String, Object> parameter) throws Exception{
 		if(!this.hasParameter(parameter)){
-			return ${BNAME_V}Service.getAll();
+			return ${BNAME_V}Dao.getAll();
 		}else{
-			return ${BNAME_V}Service.getAll(parameter);
+			return ${BNAME_V}Dao.getAll(parameter);
 		}
 	}
 	
@@ -81,9 +81,9 @@ public class ${BNAME}ManagerPR{
 
 	    Pagination<${BNAME}> p = null;
 		if(!this.hasParameter(parameter)){
-			p=${BNAME_V}Service.getPageAll( page.getPageNo(), page.getPageSize());
+			p=${BNAME_V}Dao.getPageAll( page.getPageNo(), page.getPageSize());
 		}else{
-			p=${BNAME_V}Service.getPageAllByCondition(parameter,page.getPageNo(), page.getPageSize());	
+			p=${BNAME_V}Dao.getPageAllByCondition(parameter,page.getPageNo(), page.getPageSize());	
 		}
 		page.setEntities(p.getResults());
 		page.setEntityCount(p.getTotalCount());
@@ -99,13 +99,13 @@ public class ${BNAME}ManagerPR{
 			$BNAME $BNAME_V=iter.next();
 			EntityState state=EntityUtils.getState($BNAME_V);
 			if(state.equals(EntityState.NEW)){
-				${BNAME_V}Service.insertSelective($BNAME_V);
+				${BNAME_V}Dao.insertSelective($BNAME_V);
 			}
 			if(state.equals(EntityState.MODIFIED)){
-				${BNAME_V}Service.updateSelective($BNAME_V);
+				${BNAME_V}Dao.updateSelective($BNAME_V);
 			}
 			if(state.equals(EntityState.DELETED)){
-				${BNAME_V}Service.deleteBy$KEYS($KEYS_PAR_BEAN);
+				${BNAME_V}Dao.deleteBy$KEYS($KEYS_PAR_BEAN);
 			}
 		}
 	}
