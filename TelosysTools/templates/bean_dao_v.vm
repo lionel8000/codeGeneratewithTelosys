@@ -259,11 +259,11 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	 * @param parameter
 	 * @return
 	 */
-	public Pagination<${BNAME}> getPageAllByCondition(Map<String, Object> parameter, int pageIndex, int pageSize) {
+	public Pagination<${BNAME}> getPageAll(Map<String, Object> parameter, int pageIndex, int pageSize) {
 #if ($HASDATE == true)
-		return getPageAllByCondition(parameter ,pageIndex ,pageSize ,"$ORDERNAME" ,false ,true);
+		return getPageAll(parameter ,pageIndex ,pageSize ,"$ORDERNAME" ,false ,true);
 #else
-		return getPageAllByCondition(parameter ,pageIndex ,pageSize ,"" ,false ,false);
+		return getPageAll(parameter ,pageIndex ,pageSize ,"" ,false ,false);
 #end
 	}
 	
@@ -273,8 +273,8 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	 * @param orderBy
 	 * @return
 	 */
-	public Pagination<${BNAME}> getPageAllByCondition(Map<String, Object> parameter, int pageIndex, int pageSize, String orderBy) {
-		return getPageAllByCondition((parameter ,pageIndex ,pageSize ,orderBy ,true ,true);
+	public Pagination<${BNAME}> getPageAll(Map<String, Object> parameter, int pageIndex, int pageSize, String orderBy) {
+		return getPageAll((parameter ,pageIndex ,pageSize ,orderBy ,true ,true);
 	}
 	
 	/**
@@ -284,8 +284,8 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	 * @param asc
 	 * @return
 	 */
-	public Pagination<${BNAME}> getPageAllByCondition(Map<String, Object> parameter, int pageIndex, int pageSize, String orderBy, boolean asc) {
-		return getPageAllByCondition((parameter ,pageIndex ,pageSize ,orderBy ,asc ,true);
+	public Pagination<${BNAME}> getPageAll(Map<String, Object> parameter, int pageIndex, int pageSize, String orderBy, boolean asc) {
+		return getPageAll((parameter ,pageIndex ,pageSize ,orderBy ,asc ,true);
 	}
 	
 	/**
@@ -294,12 +294,12 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	 * @param orderFlag true or false has the same meaning : get the data without any order
 	 * @return
 	 */
-	public Pagination<${BNAME}> getPageAllByCondition(Map<String, Object> parameter, int pageIndex, int pageSize, boolean orderFlag) {
-		return getPageAllByCondition((parameter ,pageIndex ,pageSize ,"" ,false ,false);
+	public Pagination<${BNAME}> getPageAll(Map<String, Object> parameter, int pageIndex, int pageSize, boolean orderFlag) {
+		return getPageAll((parameter ,pageIndex ,pageSize ,"" ,false ,false);
 	}
 	
 	
-	private Pagination<${BNAME}> getPageAllByCondition(Map<String, Object> parameter, int pageIndex, int pageSize ,String orderBy ,boolean asc ,boolean order) {
+	private Pagination<${BNAME}> getPageAll(Map<String, Object> parameter, int pageIndex, int pageSize ,String orderBy ,boolean asc ,boolean order) {
 		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
 		String countSql = "select count(*) from "+$TABLE_WITH_AS+" where 1=1 ";
 		StringBuffer sb = new StringBuffer(" ");

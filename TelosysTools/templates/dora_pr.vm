@@ -29,9 +29,9 @@
 #set ( $BNAME_SRPING_NAME = $BNAME.substring(1))
 #set ( $$BNAME_SRPING_NAME = $$BNAME_SRPING_NAME.substring(0,1).toLowerCase() + $$BNAME_SRPING_NAME.substring(1))
 #set ($FULLBEAN = $beanClass.fullName)
-#set ($LASTINDEXTOFDOT = $FULLBEAN.lastIndexOf("."));
+#set ($LASTINDEXTOFDOT = $FULLBEAN.lastIndexOf("."))
 #set ($FULLBEAN = $FULLBEAN.substring(0,$LASTINDEXTOFDOT))
-#set ($LASTINDEXTOFDOT = $FULLBEAN.lastIndexOf("."));
+#set ($LASTINDEXTOFDOT = $FULLBEAN.lastIndexOf("."))
 #set ($MODEL = $FULLBEAN.substring($LASTINDEXTOFDOT))
 package ${target.javaPackageFromFolder($SRC)};
 
@@ -89,7 +89,7 @@ public class ${BNAME}Controller{
 		if(ParameterCheck.hasValue(parameter)){
 			p=${BNAME_V}Dao.getPageAll(parameter ,page.getPageNo(), page.getPageSize());
 		}else{
-			p=${BNAME_V}Dao.getPageAllByCondition(page.getPageNo(), page.getPageSize());	
+			p=${BNAME_V}Dao.getPageAll(page.getPageNo(), page.getPageSize());	
 		}
 		page.setEntities(p.getResults());
 		page.setEntityCount(p.getTotalCount());
