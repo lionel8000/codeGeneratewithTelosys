@@ -1,20 +1,27 @@
-#foreach( $link in $beanClass.links )
-#set ($linkBean = ${link.linkType})
-#set ($collectionFlag = ($linkBean.indexOf("List")==0))
-#if($collectionFlag == false)
-#set ($foreign = $linkBean.substring(1,2).toLowerCase() + $linkBean.substring(2) +"Pid")
-#set ($shouldAutowire = false)
-#foreach($field in $beanClass.nonKeyAttributes)
-#if ($foreign.equals(${field.name}))
-#set ($shouldAutowire = true)
-#end
-#end
-#if ($shouldAutowire ==true)
-#set ( $firstLower = $linkBean.substring(0,1).toLowerCase() + $linkBean.substring(1) + "Service")
-/*
-@Autowired
-${linkBean}Service $firstLower;;
-*/
-#end
-#end
-#end
+##foreach( $link in $beanClass.links )
+##set ($linkBean = ${link.linkType})
+##set ($collectionFlag = ($linkBean.indexOf("List")==0))
+##if($collectionFlag == false)
+##set ($foreign = $linkBean.substring(1,2).toLowerCase() + $linkBean.substring(2) +"Pid")
+##set ($shouldAutowire = false)
+##foreach($field in $beanClass.nonKeyAttributes)
+##if ($foreign.equals(${field.name}))
+##set ($shouldAutowire = true)
+##end
+##end
+##if ($shouldAutowire ==true)
+##set ( $firstLower = $linkBean.substring(0,1).toLowerCase() + $linkBean.substring(1) + "Service")
+##/*
+##@Autowired
+##${linkBean}Service $firstLower;;
+##*/
+##end
+##end
+##end
+import $beanClass.fullName;
+#set ($FULLBEAN = $beanClass.fullName)
+#set ($LASTINDEXTOFDOT = $FULLBEAN.lastIndexOf("."));
+#set ($FULLBEAN = $FULLBEAN.substring(0,$LASTINDEXTOFDOT))
+#set ($LASTINDEXTOFDOT = $FULLBEAN.lastIndexOf("."));
+#set ($MODEL = $FULLBEAN.substring($LASTINDEXTOFDOT))
+$MODEL

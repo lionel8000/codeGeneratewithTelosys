@@ -1,0 +1,79 @@
+#set ( $BNAME = "${beanClass.name}" )
+#set ( $BNAME_V = "v" + $beanClass.name.substring(1,2).toLowerCase() + $beanClass.name.substring(2) )
+#set ( $BNAME_DAO = ${beanClass.name} + "Dao" )
+#set ( $BNAME_DAO_V = $BNAME_DAO.substring(0,1).toLowerCase() + $BNAME_DAO.substring(1) )
+#set ( $BNAME_SRPING_NAME = $BNAME.substring(1))
+#set ( $BNAME_SRPING_NAME = "v"+$BNAME_SRPING_NAME.substring(0,1).toLowerCase() + $BNAME_SRPING_NAME.substring(1))
+#set ( $BASE_PACKAGE = $beanClass.package.substring(0,$beanClass.package.lastIndexOf(".")))
+##set ( $MODELNAME = $BASE_PACKAGE.substring($BASE_PACKAGE.lastIndexOf(".") +1 ));
+#set ($FULLBEAN = $beanClass.fullName)
+#set ($LASTINDEXTOFDOT = $FULLBEAN.lastIndexOf("."));
+#set ($FULLBEAN = $FULLBEAN.substring(0,$LASTINDEXTOFDOT))
+#set ($LASTINDEXTOFDOT = $FULLBEAN.lastIndexOf("."));
+#set ($MODEL = $FULLBEAN.substring($LASTINDEXTOFDOT))
+package ${target.javaPackageFromFolder($SRC)};
+
+import com.kdkj.p2p.utils.ParameterCheck;
+import $beanClass.fullName;
+import com.kdkj.p2p.dao$MODEL.${BNAME}Dao;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import com.kdkj.p2p.dao$MODEL.${BNAME}Dao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import com.bstek.bdf.pagination.Pagination;
+import com.bstek.dorado.annotation.DataProvider;
+import com.bstek.dorado.annotation.DataResolver;
+import com.bstek.dorado.data.entity.EntityState;
+import com.bstek.dorado.data.entity.EntityUtils;
+import com.bstek.dorado.data.entity.FilterType;
+import com.bstek.dorado.data.provider.Page;
+
+
+@Component("${BNAME_SRPING_NAME}Controller")
+public class ${BNAME}Controller{
+   
+   private static Logger log = LoggerFactory.getLogger(${BNAME}Controller.class);  
+
+	@Autowired
+	private ${BNAME}Dao ${BNAME_V}Dao;
+	
+	/**
+	 * 
+	 * 
+	 * @param parameter
+	 * @return
+	 * @throws Exception
+	 */
+	//${BNAME_SRPING_NAME}Controller#getAll
+	@DataProvider
+	public Collection<$BNAME> getAll(Map<String, Object> parameter) throws Exception{
+		if(!this.hasParameter(parameter)){
+			return ${BNAME_V}Dao.getAll();
+		}else{
+			return ${BNAME_V}Dao.getAll(parameter);
+		}
+	}
+	
+   	//${BNAME_SRPING_NAME}Controller#getPageAll
+	@DataProvider
+	public void getPageAll(Page<$BNAME> page, Map<String, Object> parameter) throws Exception{
+
+	    Pagination<${BNAME}> p = null;
+		if(!this.hasParameter(parameter)){
+			p=${BNAME_V}Dao.getPageAll( page.getPageNo(), page.getPageSize());
+		}else{
+			p=${BNAME_V}Dao.getPageAllByCondition(parameter,page.getPageNo(), page.getPageSize());	
+		}
+		page.setEntities(p.getResults());
+		page.setEntityCount(p.getTotalCount());
+	}
+	
+	private boolean hasParameter(Map parameter){
+		return parameter!=null;		
+	}	
+}

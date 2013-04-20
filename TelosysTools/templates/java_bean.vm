@@ -25,14 +25,22 @@ public class $beanClass.name implements Serializable
     private static final long serialVersionUID = 1L;
 
 #foreach( $field in $beanClass.keyAttributes )
-    private $field.formatedType(10) $field.formatedName(12) #if($field.hasInitialValue())= ${field.initialValue} #end; // Primary Key
+    private $field.formatedType(20) $field.formatedName(20) #if($field.hasInitialValue())= ${field.initialValue} #end; // Primary Key
 #end
 
 #foreach( $field in $beanClass.nonKeyAttributes )
-    private $field.formatedType(10) $field.formatedName(12) #if($field.hasInitialValue())= ${field.initialValue} #end;
+    private $field.formatedType(20) $field.formatedName(20) #if($field.hasInitialValue())= ${field.initialValue} #end;
 #end
 #foreach( $link in $beanClass.links )
-    private $link.formatedType(10) $link.formatedName(12);
+#set ($linkBean = ${link.linkType})
+#set ($collectionFlag = ($linkBean.indexOf("List")==0))
+#if($collectionFlag == true)
+    private $link.formatedType(20) $link.formatedName(20);
+#else
+#set ($LINKNAME = $link.formatedName(20))
+#set ($NAMERELATE = $LINKNAME.substring(1,2).toLowerCase() + $LINKNAME.substring(2))
+	private $link.formatedType(20) $NAMERELATE;
+#end
 #end
     /**
      * Default constructor
@@ -105,17 +113,24 @@ public class $beanClass.name implements Serializable
 
 #end  
 #foreach( $link in $beanClass.links )
-#if ( $link.setter )    public void ${link.setter}( ${link.linkType} ${link.javaName} )
+#set ($linkBean = ${link.linkType})
+#set ($collectionFlag = ($linkBean.indexOf("List")==0))
+#if($collectionFlag == false)
+#set ($LINKNAME = $link.javaName)
+#set ($NAMERELATE = $LINKNAME.substring(1,2).toLowerCase() + $LINKNAME.substring(2))
+#else
+#set ($NAMERELATE = ${link.javaName})
+#end
+#if ( $link.setter )    public void ${link.setter}( ${link.linkType} $NAMERELATE )
     {
-        this.${link.javaName} = ${link.javaName};
+        this.$NAMERELATE = $NAMERELATE;
     }
 #end
 #if ( $link.getter )    public ${link.linkType} ${link.getter}()
     {
-        return this.${link.javaName};
+        return this.$NAMERELATE;
     }
 #end
-
 #end      
 
     //----------------------------------------------------------------------

@@ -1,7 +1,11 @@
-package com.hlj.tech.kdkj.customer.manager;
+;
+;
+package com.kdkj.p2p.controller.loan;
 
-import com.hlj.tech.kdkj.customer.entities.TLoan;
-import com.hlj.tech.kdkj.customer.service.TLoanService;
+import com.kdkj.p2p.utils.ParameterCheck;
+import com.kdkj.p2p.entities.loan.TLoan;
+import com.kdkj.p2p.dao.loan.TLoanDao;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,13 +23,13 @@ import com.bstek.dorado.data.entity.FilterType;
 import com.bstek.dorado.data.provider.Page;
 
 
-@Component("loanManagerPR")
-public class TLoanManagerPR{
+@Component("loanController")
+public class TLoanController{
    
-   private static Logger log = LoggerFactory.getLogger(TLoanManagerPR.class);  
+   private static Logger log = LoggerFactory.getLogger(TLoanController.class);  
 
 	@Autowired
-	private TLoanDao tLoanDao;
+	private TLoanDao loanDao;
 	
 	/**
 	 * 
@@ -34,52 +38,48 @@ public class TLoanManagerPR{
 	 * @return
 	 * @throws Exception
 	 */
-	//loanManagerPR#getAll
+	//loanController#getAll
 	@DataProvider
 	public Collection<TLoan> getAll(Map<String, Object> parameter) throws Exception{
-		if(!this.hasParameter(parameter)){
-			return tLoanDao.getAll();
+		if(ParameterCheck.hasValue(parameter)){
+			return loanDao.getAll(parameter);
 		}else{
-			return tLoanDao.getAll(parameter);
+			return loanDao.getAll();
 		}
 	}
 	
-   	//loanManagerPR#getPageAll
+   	//loanController#getPageAll
 	@DataProvider
 	public void getPageAll(Page<TLoan> page, Map<String, Object> parameter) throws Exception{
 
 	    Pagination<TLoan> p = null;
-		if(!this.hasParameter(parameter)){
-			p=tLoanDao.getPageAll( page.getPageNo(), page.getPageSize());
+		if(ParameterCheck.hasValue(parameter)){
+			p=loanDao.getPageAllByCondition(parameter ,page.getPageNo(), page.getPageSize());
 		}else{
-			p=tLoanDao.getPageAllByCondition(parameter,page.getPageNo(), page.getPageSize());	
+			p=loanDao.getPageAll(page.getPageNo(), page.getPageSize());	
 		}
 		page.setEntities(p.getResults());
 		page.setEntityCount(p.getTotalCount());
 	}
 
-	//loanManagerPR#saveAll
+	//loanController#saveAll
 	@DataResolver
 	public void saveAll(Collection<TLoan> coll) throws Exception{
 		
 		@SuppressWarnings("unchecked")
 		Iterator<TLoan> iter=EntityUtils.getIterator(coll, FilterType.DIRTY);
 		while(iter.hasNext()){
-			TLoan tLoan=iter.next();
-			EntityState state=EntityUtils.getState(tLoan);
+			TLoan loan=iter.next();
+			EntityState state=EntityUtils.getState(loan);
 			if(state.equals(EntityState.NEW)){
-				tLoanDao.insertSelective(tLoan);
+				loanDao.insertSelective(loan);
 			}
 			if(state.equals(EntityState.MODIFIED)){
-				tLoanDao.updateSelective(tLoan);
+				loanDao.updateSelective(loan);
 			}
 			if(state.equals(EntityState.DELETED)){
-				tLoanDao.deleteByLoanId(tLoan.getLoanId());
+				loanDao.deleteByLoanId(loan.getLoanId());
 			}
 		}
 	}
-	
-	private boolean hasParameter(Map parameter){
-		return parameter!=null;		
-	}	
 }

@@ -6,62 +6,10 @@
 #end
 ## BEAN的名字 City
 #set ( $BNAME = "${beanClass.name}" )
-#if ( $BNAME.indexOf("V") == 0)
-#set ( $ISVIEW = true)
-#end
 ## BEAN类的对象名 city
-#set ( $BNAME_V = $beanClass.name.substring(0,1).toLowerCase() + $beanClass.name.substring(1) )
+#set ( $BNAME_V = $beanClass.name.substring(1,2).toLowerCase() + $beanClass.name.substring(2) )
 #set ( $BNAME_DAO = ${beanClass.name} + "Dao" )
 #set ( $BNAME_DAO_V = $BNAME_DAO.substring(0,1).toLowerCase() + $BNAME_DAO.substring(1) )
-## 主键组合，例如key1 key2 则为Key1Key2
-#set ( $KEYS = "" )
-## 主键变量 例如key1 key2 则为int key1,int key2
-#set ( $KEYS_PAR = "" )
-##主键返回类型，其实没用处 例如key1 key2 则为int,int
-#set ( $KEYS_TYPE = "" )
-##主键属性的获取。例如city.getId(),如果是多个主键则为 city,getId(),city.getId2()
-#set ( $KEYS_PAR_BEAN = "" )
-##主键属性变量的获取。例如id1,id2
-#set ( $KEYS_PAR_NODECLARE = "" )
-##主键属性变量的获取。例如city.getId1(),city.getId2()
-#set ( $BEAN_V_KEY_GETTER = "" )
-#foreach($field in $beanClass.keyAttributes)
-#set ( $KEYS = $KEYS+$field.name.substring(0,1).toUpperCase()+$field.name.substring(1))
-#set ( $KEYS_PAR = $KEYS_PAR+ "," + $field.type +" " + $field.name )
-#set ( $KEYS_TYPE = $KEYS_TYPE+ "," + $field.type)
-#set ( $KEYS_PAR_BEAN = $KEYS_PAR_BEAN+ "," + $BNAME_V +"." + $field.getter+"()" )
-#set ( $KEYS_PAR_NODECLARE = $KEYS_PAR_NODECLARE+ ","+$field.name )
-#set ($BEAN_V_KEY_GETTER = $BEAN_V_KEY_GETTER +","+ ${BNAME_V}+"."+${field.getter}+"()")
-#end
-#set ( $KEYS_PAR = $KEYS_PAR.substring(1) )
-#set ( $KEYS_TYPE = $KEYS_TYPE.substring(1) )
-#set ( $KEYS_PAR_BEAN = $KEYS_PAR_BEAN.substring(1) )
-#set ( $KEYS_PAR_NODECLARE = $KEYS_PAR_NODECLARE.substring(1) )
-#set ( $BEAN_V_KEY_GETTER = $BEAN_V_KEY_GETTER.substring(1) )
-##主键变量集合，例如id1,id2,id3
-#set ( $SQL_KEY_NAMES = "" )
-#set ( $SQL_KEY_AS_NAMES = "" )
-##主键变量集合占位符，例如id1,id2,id3 则得到?,?,?
-#set ( $SQL_KEY_NAMES_Q = "" )
-##主键变量集合，例如city.getId1(),city.getId2()
-#set ( $SQL_KEY_BEAN_GETTER = "" )
-##主键变量集合用于查询修改，例如id1=?,id2=?,id3=?
-#set ( $SQL_UPDATE_KEY_Q = "" )
-#set ( $SQL_SELECT_KEY_AS_Q = "" )
-#foreach($field in $beanClass.keyAttributes)
-#set ( $SQL_KEY_NAMES = $SQL_KEY_NAMES+ ","+$field.databaseName)
-#set ( $SQL_KEY_AS_NAMES = $SQL_KEY_AS_NAMES+ ","+${BNAME}+"."+$field.databaseName + " as " + $field.name)
-#set ( $SQL_KEY_NAMES_Q = $SQL_KEY_NAMES_Q+ ",?")
-#set ( $SQL_KEY_BEAN_GETTER = $SQL_KEY_BEAN_GETTER+ ","+$BNAME_V + "." + $field.getter+"()")
-#set ( $SQL_UPDATE_KEY_Q = $SQL_UPDATE_KEY_Q + " and $field.databaseName=?")
-#set ( $SQL_SELECT_KEY_AS_Q = $SQL_SELECT_KEY_AS_Q + " and "+${BNAME}+"."+"$field.databaseName=?")
-#end
-#set ( $SQL_KEY_NAMES = $SQL_KEY_NAMES.substring(1) )
-#set ( $SQL_KEY_AS_NAMES = $SQL_KEY_AS_NAMES.substring(1) )
-#set ( $SQL_KEY_NAMES_Q = $SQL_KEY_NAMES_Q.substring(1) )
-#set ( $SQL_KEY_BEAN_GETTER = $SQL_KEY_BEAN_GETTER.substring(1) )
-#set ( $SQL_UPDATE_KEY_Q = $SQL_UPDATE_KEY_Q.substring(4) )
-#set ( $SQL_SELECT_KEY_AS_Q = $SQL_SELECT_KEY_AS_Q.substring(4) )
 ##变量集合，例如id1,id2,id3
 #set ( $SQL_NOKEY_NAMES = "" )
 #set ( $SQL_NOKEY_AS_NAMES = "" )
@@ -83,25 +31,7 @@
 #set ( $SQL_NOKEY_NAMES_Q = $SQL_NOKEY_NAMES_Q.substring(1) )
 #set ( $SQL_NOKEY_BEAN_GETTER = $SQL_NOKEY_BEAN_GETTER.substring(1) )
 #set ( $SQL_UPDATE_NOKEY_Q = $SQL_UPDATE_NOKEY_Q.substring(1) )
-#if  ($AUTO_INCR_KEY)
-##插入语句  (id,name_id,cr_date) values(?,?,?)
-#set ( $INSERT_SQL = "(" + $SQL_NOKEY_NAMES +")  values(" + $SQL_NOKEY_NAMES_Q +")")
-##插入语句参数  city.getId(),city.getNameid(),city.getCr_date()
-#set ( $INSERT_SQL_PARM = $SQL_NOKEY_BEAN_GETTER)
-#else
-#set ( $INSERT_SQL = "("+$SQL_KEY_NAMES+","+$SQL_NOKEY_NAMES+")  values(" +$SQL_KEY_NAMES_Q+"," + $SQL_NOKEY_NAMES_Q +")")
-#set ( $INSERT_SQL_PARM = $SQL_KEY_BEAN_GETTER + ","+$SQL_NOKEY_BEAN_GETTER)
-#end
-##更新时候传入的参数，主键值在最后
-#set ( $UPDATE_SQL_PARM = $SQL_NOKEY_BEAN_GETTER + ","+$SQL_KEY_BEAN_GETTER) 
-## 更新时候，SQL语句中的 where id=? 
-#set ( $SQL_UPDATE_KEY_Q_WITHWHERE = " where " + $SQL_UPDATE_KEY_Q)
-#set ( $SQL_SELECT_BYKEY_Q_WITHWHERE = " as "+${BNAME}+" where " + $SQL_SELECT_KEY_AS_Q)
-##更新时候set后面的语句
-#set ( $SQL_UPDATE_SET_TO_END = " set " +  "$SQL_UPDATE_NOKEY_Q" +  "$SQL_UPDATE_KEY_Q_WITHWHERE")
-##
-#set ( $SQL_DELETE_WHERE_TO_END = " where " + $SQL_UPDATE_KEY_Q)
-#set ( $SQL_GET_BY_KEY = "select " + $SQL_KEY_AS_NAMES + " ," + $SQL_NOKEY_AS_NAMES + " from ")
+#set ( $SQL_GET_BY_KEY = "select " + $SQL_NOKEY_AS_NAMES + " from ")
 #set ( $TABLE_WITH_AS = "TABLE" + ' +" as '+ ${BNAME}+ '" ')
 package ${target.javaPackageFromFolder($SRC)};
 
@@ -135,225 +65,13 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 
     private static String TABLE = "${beanClass.sqlTable}";
 	
-	@Deprecated
-	public $KEYS_TYPE insert(${BNAME} $BNAME_V) throws Exception {
-		String sql = "insert into "+TABLE +"$INSERT_SQL";
-		Object args[] = new Object[] { $INSERT_SQL_PARM };
-		if(log.isDebugEnabled()){
-			log.debug("insert${BNAME} : SQL IS : " + sql + " : PARAM IS : " + args);
-		}
-		this.getJdbcTemplate().update(sql, args);
-#if ( $AUTO_INCR_KEY == true )
-#foreach($field in $beanClass.keyAttributes)
-#set ($AUTOKEYFILENAME = $field.type )
-#if ( $AUTOKEYFILENAME == "Integer")
-		${BNAME_V}.${field.setter}(this.getJdbcTemplate().queryForInt("select last_insert_id()"));
-#else
-#set ( $KEYCAST = $AUTOKEYFILENAME.substring(0,1).toLowerCase() + $AUTOKEYFILENAME.substring(1))
-		${BNAME_V}.${field.setter}(($KEYCAST)this.getJdbcTemplate().queryForInt("select last_insert_id()"));
-#end
-#end
-#end		
-        return $BEAN_V_KEY_GETTER;
-	}
-
-	
-	
-	public $KEYS_TYPE insertSelective(${BNAME} $BNAME_V) throws Exception {
-		StringBuffer columns = new StringBuffer();
-		StringBuffer questions = new StringBuffer(30);
-		List<Object> params = new ArrayList<Object>();
-#if ( $AUTO_INCR_KEY == false )
-#foreach($field in $beanClass.keyAttributes)
-		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
-			params.add(${BNAME_V}.${field.getter}());
-#set ( $COMMA_FILED = "," + $field.databaseName)
-			columns.append("$COMMA_FILED");
-			questions.append(",?");
-		}
-#end
-#end	
-
-
-#foreach($field in $beanClass.nonKeyAttributes)
-#set ( $FILEDNAME = ${field.name})
-#set ( $COMMA_FILED = "," + $field.databaseName)
-#if ($FILEDNAME.indexOf("createDate") == 0)
-		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
-			params.add(${BNAME_V}.${field.getter}());
-			columns.append("$COMMA_FILED");
-			questions.append(",?");
-		}else{
-			columns.append("$COMMA_FILED");
-			questions.append(",now()");
-		}
-#elseif ($FILEDNAME.indexOf("updateDate") == 0)
-		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
-			params.add(${BNAME_V}.${field.getter}());
-			columns.append("$COMMA_FILED");
-			questions.append(",?");
-		}else{
-			columns.append("$COMMA_FILED");
-			questions.append(",now()");
-		}
-#elseif ($FILEDNAME.indexOf("createBy") == 0)
-		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
-			params.add(${BNAME_V}.${field.getter}());
-			columns.append("$COMMA_FILED");
-			questions.append(",?");
-		}else{
-			params.add(ContextHolder.getContext().getLoginUsername());
-			columns.append("$COMMA_FILED");
-			questions.append(",now()");
-		}
-#elseif ($FILEDNAME.indexOf("updateBy") == 0)
-		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
-			params.add(${BNAME_V}.${field.getter}());
-			columns.append("$COMMA_FILED");
-			questions.append(",?");
-		}else{
-			params.add(ContextHolder.getContext().getLoginUsername());
-			columns.append("$COMMA_FILED");
-			questions.append(",?");
-		}
-#else 
-		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
-			params.add(${BNAME_V}.${field.getter}());
-			columns.append("$COMMA_FILED");
-			questions.append(",?");
-		}
-#end
-#end		
-		String sql = "insert into " + TABLE + "(" + columns.toString().substring(1) + ") values(" + questions.toString().substring(1) +")";
-		if(log.isDebugEnabled()){
-			log.debug("insert${BNAME}Selective : SQL IS : " + sql + " : PARAM IS : " + params.toArray());
-		}
-		this.getJdbcTemplate().update(sql, params.toArray());
-		
-#if ( $AUTO_INCR_KEY == true )
-#foreach($field in $beanClass.keyAttributes)
-#set ($AUTOKEYFILENAME = $field.type )
-#if ( $AUTOKEYFILENAME == "Integer")
-		${BNAME_V}.${field.setter}(this.getJdbcTemplate().queryForInt("select last_insert_id()"));
-#else
-#set ( $KEYCAST = $AUTOKEYFILENAME.substring(0,1).toLowerCase() + $AUTOKEYFILENAME.substring(1))
-		${BNAME_V}.${field.setter}(($KEYCAST)this.getJdbcTemplate().queryForInt("select last_insert_id()"));
-#end
-#end
-#end
-		return $BEAN_V_KEY_GETTER;
-	}
-	
-	
-	
-	public void deleteBy$KEYS($KEYS_PAR) throws Exception {
-		String sql = "delete from " +TABLE +"$SQL_DELETE_WHERE_TO_END";
-		Object args[] = new Object[] {$KEYS_PAR_NODECLARE};
-
-		if(log.isDebugEnabled()){
-			log.debug("delete${BNAME}By$KEYS : SQL IS : " + sql + " : PARAM IS : " + args);
-		}
-		this.getJdbcTemplate().update(sql, args);
-	}
-	
-	
-    
-	public void deleteByBean(${BNAME} $BNAME_V) throws Exception{
-		List<Object> params = new ArrayList<Object>();
-  		StringBuffer columns = new StringBuffer();
-#foreach($field in $beanClass.nonKeyAttributes)
-		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
-			params.add(${BNAME_V}.${field.getter}());
-#set ( $COMMA_FILED = "and " + $field.databaseName + "=? ")
-			columns.append("$COMMA_FILED");
-		}
-#end
-
-		String sql = "delete from " +TABLE + " where " +columns.toString().substring(4);
-		if(log.isDebugEnabled()){
-			log.debug("delete${BNAME}ByBean : SQL IS : " + sql + " : PARAM IS : " + params.toArray());
-		}
-	    this.getJdbcTemplate().update(sql,params.toArray());
-	}
-	
-	
-	@Deprecated
-	public void update(${BNAME} $BNAME_V) throws Exception {
-		String sql = "update " +TABLE +"$SQL_UPDATE_SET_TO_END";
-		Object args[] = new Object[] {$UPDATE_SQL_PARM};
-		if(log.isDebugEnabled()){
-			log.debug("update${BNAME} : SQL IS : " + sql + " : PARAM IS : " + args);
-		}
-		this.getJdbcTemplate().update(sql, args);
-	}
-	
-	
-	
-	public void updateSelective(${BNAME} $BNAME_V) throws Exception {
-		List<Object> params = new ArrayList<Object>();
-        StringBuffer columns = new StringBuffer();
-        String keys = "";
-#foreach($field in $beanClass.nonKeyAttributes)
-#set ( $FILEDNAME = ${field.name})
-#set ( $COMMA_FILED = "," + $field.databaseName +"=?")
-#if ($FILEDNAME.indexOf("updateDate") == 0)
-		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
-			params.add(${BNAME_V}.${field.getter}());
-			columns.append("$COMMA_FILED");
-		}else{
-#set ( $COMMA_FILED = "," + $field.databaseName +"=now()")
-   			columns.append("$COMMA_FILED");
-		}
-#elseif ($FILEDNAME.indexOf("updateBy") == 0)
-		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
-			params.add(${BNAME_V}.${field.getter}());
-			columns.append("$COMMA_FILED");
-		}else{
-			params.add(ContextHolder.getContext().getLoginUsername());
-			columns.append("$COMMA_FILED");
-		}
-#else
-		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
-			params.add(${BNAME_V}.${field.getter}());
-			columns.append("$COMMA_FILED");
-		}
-#end
-#end		
-
-#foreach($field in $beanClass.keyAttributes)
-		
-		if(ParameterCheck.hasValue(${BNAME_V}.${field.getter}())){
-			params.add(${BNAME_V}.${field.getter}());
-#set ( $COMMA_FILED = "and " + $field.databaseName +"=? ")			
-			keys += "$COMMA_FILED";
-		}
-#end
-		String sql = "update " + TABLE + " set " +columns.toString().substring(1)+" where "+keys.substring(4);
-		if(log.isDebugEnabled()){
-			log.debug("update${BNAME}Selective : SQL IS : " + sql + " : PARAM IS : " + params.toArray());
-		}
-		this.getJdbcTemplate().update(sql, params.toArray());
-	}
-	
-	
-		
-	
-	public ${BNAME} getBy$KEYS($KEYS_PAR) {
-		String sql = "$SQL_GET_BY_KEY"+TABLE+"$SQL_SELECT_BYKEY_Q_WITHWHERE";
-		if(log.isDebugEnabled()){
-			log.debug("get${BNAME}By$KEYS : SQL IS : " + sql + " : PARAM IS : " + $KEYS_PAR_NODECLARE);
-		}
-		List<${BNAME}> ${BNAME_V}List = this.getJdbcTemplate().query(sql,new Object[]{$KEYS_PAR_NODECLARE}, ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
-		return ${BNAME_V}List.size() > 0 ? ${BNAME_V}List.get(0) : null;
-	}
-	
 	/**
 	 * if has updateDate or create Date then orderby them:  updateDate first
 	 * if has no updateDate or createDate then has no order
 	 * @param parameter
 	 * @return
 	 */
-	public Collection<${BNAME}> getAll(Map<String, Object> parameter) {
+		public Collection<${BNAME}> getAll(Map<String, Object> parameter) {
 #set ($HASCREATEDATE = false)
 #set ($HASUPDATEDATE = false)
 #set ($HASDATE = false)
@@ -390,7 +108,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	}
 	
 	/**
-	 * get the data by orderBy specify by the Asc true asc  false desc
+	 * get the datat by orderBy specify by the Asc true asc  false desc
 	 * @param parameter
 	 * @param orderBy
 	 * @param asc
@@ -411,7 +129,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		return getAll(parameter ,"" ,false ,false);
 	}
 	
-	private Collection<${BNAME}> getAll(Map<String, Object> parameter,String orderBy,boolean asc,boolean order) {
+	private Collection<${BNAME}> getAll(Map<String, Object> parameter ,String orderBy, boolean asc ,boolean order) {
 		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
 		StringBuffer sb = new StringBuffer(" ");
 		List<Object> params = new ArrayList<Object>();
@@ -435,7 +153,6 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 			}
 #end
 		}
-		
 		if(order){
 			String orderSql = orderBy + (asc ? " asc":" desc"); 
 			sb.append(" order by $BNAME." + orderSql);
@@ -451,7 +168,6 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		}
 		
 	}
-
 	
 	/**
 	 * if has updateDate or create Date then orderby them:  updateDate first
@@ -498,7 +214,6 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		return getAllByBean($BNAME_V ,"" ,false ,false);
 	}
 	
-
 	
 	private Collection<${BNAME}> getAllByBean(${BNAME} $BNAME_V,String orderBy,boolean asc,boolean order) {
 		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
@@ -528,13 +243,14 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 			sb.append(" order by $BNAME." + orderSql);
 		}
 		if(log.isDebugEnabled()){
-			log.debug("getAllByBean : SQL IS : " + sql + sb.toString()+ " : PARAM IS : " + params.toArray());
+			log.debug("getAll${BNAME}ByBean : SQL IS : " + sql + sb.toString()+ " : PARAM IS : " + params.toArray());
 		}
 		if(withParameter){
 			return this.getJdbcTemplate().query(sql+ sb.toString(),params.toArray(), ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
 		}else{
 			return this.getJdbcTemplate().query(sql, ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
-		}		
+		}
+		
 	}
 	
 	/**
@@ -558,7 +274,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	 * @return
 	 */
 	public Pagination<${BNAME}> getPageAllByCondition(Map<String, Object> parameter, int pageIndex, int pageSize, String orderBy) {
-		return getPageAllByCondition(parameter ,pageIndex ,pageSize ,orderBy ,true ,true);
+		return getPageAllByCondition((parameter ,pageIndex ,pageSize ,orderBy ,true ,true);
 	}
 	
 	/**
@@ -569,7 +285,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	 * @return
 	 */
 	public Pagination<${BNAME}> getPageAllByCondition(Map<String, Object> parameter, int pageIndex, int pageSize, String orderBy, boolean asc) {
-		return getPageAllByCondition(parameter ,pageIndex ,pageSize ,orderBy ,asc ,true);
+		return getPageAllByCondition((parameter ,pageIndex ,pageSize ,orderBy ,asc ,true);
 	}
 	
 	/**
@@ -579,10 +295,11 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	 * @return
 	 */
 	public Pagination<${BNAME}> getPageAllByCondition(Map<String, Object> parameter, int pageIndex, int pageSize, boolean orderFlag) {
-		return getPageAllByCondition(parameter ,pageIndex ,pageSize ,"" ,false ,false);
+		return getPageAllByCondition((parameter ,pageIndex ,pageSize ,"" ,false ,false);
 	}
 	
-	private Pagination<${BNAME}> getPageAllByCondition(Map<String, Object> parameter, int pageIndex, int pageSize,String orderBy,boolean asc,boolean order) {
+	
+	private Pagination<${BNAME}> getPageAllByCondition(Map<String, Object> parameter, int pageIndex, int pageSize ,String orderBy ,boolean asc ,boolean order) {
 		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
 		String countSql = "select count(*) from "+$TABLE_WITH_AS+" where 1=1 ";
 		StringBuffer sb = new StringBuffer(" ");
@@ -609,7 +326,6 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 #end
 		}
 		Pagination<${BNAME}> page = new Pagination<${BNAME}>(pageIndex,pageSize);
-		
 		if(order){
 			String orderSql = orderBy + (asc ? " asc":" desc"); 
 			sb.append(" order by $BNAME." + orderSql);
@@ -647,18 +363,18 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	 * @return
 	 */
 	public Pagination<${BNAME}> getPageAllByBean(${BNAME} $BNAME_V, int pageIndex, int pageSize,String orderBy) {
-		return  getPageAllByBean($BNAME_V ,pageIndex ,pageSize ,orderBy ,true ,true);
+			return getPageAllByBean($BNAME_V ,pageIndex ,pageSize ,orderBy ,true ,true);
 	}
 	
 	/**
-	 * get the datat by orderBy specify by the Asc true asc  false desc
+	 * get the data by orderBy specify by the Asc true asc  false desc
 	 * @param parameter
 	 * @param orderBy
 	 * @param asc
 	 * @return
 	 */
 	public Pagination<${BNAME}> getPageAllByBean(${BNAME} $BNAME_V, int pageIndex, int pageSize,String orderBy,boolean asc) {
-		return  getPageAllByBean($BNAME_V ,pageIndex ,pageSize ,orderBy ,asc ,true);
+		return getPageAllByBean($BNAME_V ,pageIndex ,pageSize ,orderBy ,asc ,true);
 	}
 	
 	
@@ -669,10 +385,11 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	 * @return
 	 */
 	public Pagination<${BNAME}> getPageAllByBean(${BNAME} $BNAME_V, int pageIndex, int pageSize,boolean orderFlag) {
-		return  getPageAllByBean($BNAME_V ,pageIndex ,pageSize ,"" ,false ,false);
+		return getPageAllByBean($BNAME_V ,pageIndex ,pageSize ,"" ,false ,false);
 	}
 	
-	private Pagination<${BNAME}> getPageAllByBean(${BNAME} $BNAME_V, int pageIndex, int pageSize,String orderBy,boolean asc,boolean order) {
+	
+	private Pagination<${BNAME}> getPageAllByBean(${BNAME} $BNAME_V, int pageIndex, int pageSize ,String orderBy,boolean asc,boolean order) {
 		String sql = "$SQL_GET_BY_KEY"+$TABLE_WITH_AS+" where 1=1 ";
 		String countSql = "select count(*) from "+$TABLE_WITH_AS+" where 1=1 ";
 		StringBuffer sb = new StringBuffer(" ");
@@ -698,6 +415,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 #end
 
 		Pagination<${BNAME}> page = new Pagination<${BNAME}>(pageIndex,pageSize);
+		
 		if(order){
 			String orderSql = orderBy + (asc ? " asc":" desc"); 
 			sb.append(" order by $BNAME." + orderSql);
@@ -735,7 +453,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	 * @return
 	 */
 	public List<${BNAME}> getAll(String orderBy){
-		return getAll(orderBy ,true ,true);
+		return getAll(orderBy ,asc ,order);
 	}
 	
 	/**
@@ -746,7 +464,7 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	 * @return
 	 */
 	public List<${BNAME}> getAll(String orderBy,boolean asc){
-		return getAll(orderBy ,asc ,true);
+		return getAll(orderBy ,asc ,order);
 	}
 	
 	/**
@@ -756,16 +474,17 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 	 * @return
 	 */
 	public List<${BNAME}> getAll(boolean orderFlag){
-		return getAll("" ,false ,false);
+		return getAll(orderBy ,asc ,order);
 	}
 	
 	private List<${BNAME}> getAll(String orderBy,boolean asc,boolean order){
-		String sql = "$SQL_GET_BY_KEY" + $TABLE_WITH_AS;	
+		String sql = "$SQL_GET_BY_KEY" + $TABLE_WITH_AS;		
 		if(order){
 			String orderSql = orderBy + (asc ? " asc":" desc"); 
 			sql += (" order by $BNAME." + orderSql);
-		}
-		return this.getJdbcTemplate().query(sql, ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));	
+		}		
+		return this.getJdbcTemplate().query(sql, ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
+		
 	}
 	
 	/**
@@ -813,17 +532,14 @@ public class ${BNAME}Dao extends CoreJdbcDaoSupport {
 		return getPageAll(pageIndex ,pageSize ,"" ,false ,false);
 	}
 	
-	
-	
 	private Pagination<${BNAME}> getPageAll(int pageIndex, int pageSize,String orderBy,boolean asc,boolean order) {
 		String sql ="$SQL_GET_BY_KEY" + $TABLE_WITH_AS;
 		String countSql = "select count(*) from " + TABLE;
-		
+		Pagination<${BNAME}> page = new Pagination<${BNAME}>(pageIndex,pageSize);
 		if(order){
 			String orderSql = orderBy + (asc ? " asc":" desc"); 
 			sql += (" order by $BNAME." + orderSql);
-		}
-		Pagination<${BNAME}> page = new Pagination<${BNAME}>(pageIndex,pageSize);
+		}	
 		this.paginationQuery(sql,countSql, page,ParameterizedBeanPropertyRowMapper.newInstance(${BNAME}.class));
 		return page;
 	}
